@@ -41,7 +41,7 @@ int main(int argc, char** argv) {
 
                 string n = command;
                 if (n == "Q" || n == "Quit") {
-                    cout << "Durchlaufzeit: " << (clock() - tstart) / CLOCKS_PER_SE << '\n';
+                    cout << "Durchlaufzeit: " << (clock() - tstart) / CLOCKS_PER_SEC << '\n';
                     kill(getppid(), SIGUSR1);
 
                 }
