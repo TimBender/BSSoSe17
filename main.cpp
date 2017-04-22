@@ -50,7 +50,8 @@ int main(int argc, char** argv) {
             break;
         case 0: /*child*/
         {
-            //                while(1){
+            //Schleife wird dann für die Simulation genutzt bei der die init.txt eingelesen wird und die Befehle die dort drinne stehen ausgeführt werden.               
+            //while(1){
             //                    
             //                }
             read(fd[0], command, BUFFER_BIT);
@@ -80,7 +81,7 @@ int main(int argc, char** argv) {
             }
 
             //nächsten Befehl ausführen
-            if ((cmd == "S" || cmd == "Step") && isAutoMode == true) {
+            if ((cmd == "S" || cmd == "Step") && isAutoMode == false) {
                 cout << "Next step. Step " << ++step_counter << endl;
 
             }
