@@ -105,7 +105,8 @@ int main(int argc, char** argv) {
 
                 int val = 0;
 
-                cpu_commands(init_cmd, val, int_reg);
+                cpu_commands(init_cmd, val, int_reg); // Befehle müssen noch im Sekundentakt laufen
+                //Alarm Signal verwenden? Als Timer?
 
                 cout << endl;
             }
