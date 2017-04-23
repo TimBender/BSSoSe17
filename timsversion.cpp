@@ -16,46 +16,7 @@ using namespace std;
 
 #define BUFFER_BIT 510
 
-void cpu_commands(char& cmd, int& val, int& int_reg) {
 
-    switch (cmd) {
-        case 'S':
-        {
-            int_reg = 0;
-            cout << "Intregister wird gesetzt auf: " << int_reg;
-            break;
-        }
-        case 'A':
-        {
-            val += int_reg;
-            cout << val;
-            break;
-        }
-        case 'D':
-        {
-            val -= int_reg;
-            cout << val;
-            break;
-        }
-        case 'B':
-        {
-            cout << "Process blocked.";
-            //kill(getpid(), SIGSTOP);
-            break;
-        }
-        case 'R':
-        {
-            cout << "Hier wird ein neues Programm aufgerufen";
-            break;
-        }
-        case 'E':
-        {
-            cout << "Process terminated" << endl;
-            exit(0);
-        }
-    }
-
-}
 
 int main(int argc, char** argv) {
     const string file_name = "init.txt";
@@ -105,7 +66,35 @@ int main(int argc, char** argv) {
 
                 int val = 0;
 
-                cpu_commands(init_cmd, val, int_reg);
+                if (init_cmd == 'S') {
+                    int_reg = 0;
+                    cout << "Intregister wird gesetzt auf: " << int_reg;
+                }
+
+
+                if (init_cmd == 'A') {
+                    val += int_reg;
+                    cout << val;
+                }
+
+                if (init_cmd == 'D') {
+                    val -= int_reg;
+                    cout << val;
+                }
+                if (init_cmd == 'B' /*|| cmd == "Block"*/) {
+                    cout << "Process blocked.";
+                    //kill(getpid(), SIGSTOP);
+                }
+
+                if (init_cmd == 'R') {
+                    cout << "Hier wird ein neues Programm aufgerufen";
+                }
+
+
+                if (init_cmd == 'E') {
+                    cout << "Process terminated" << endl;
+                    exit(0);
+                }
 
                 cout << endl;
             }
