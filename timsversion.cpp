@@ -72,6 +72,8 @@ int main(int argc, char** argv) {
 
     int int_reg; //Integer Register
 
+    //IDEE: Das hier zum Vektor machen, alle Informationen per getline einlesen und dann den Vektor weiter verarbeiten
+    //Ziel davon ist, dass die Init auch Zahlen und Dateinamen beinhalten soll, die dann mit substr() geholt werden.
     char init_cmd; //Befehle aus der init.txt sollen hiermit eingelesen werden.
 
     string buffer1, buffer2;
