@@ -57,6 +57,24 @@ int main(int argc, char** argv) {
             break;
         case 0: /*child*/
         {
+            //Lesen des eingegebenen Befehls
+            read(fd[0], command, BUFFER_BIT);
+            string cmd = command;
+            
+                        //Modus wechseln
+            if (cmd == "M" || cmd == "Mode") {
+                cout << "Mode changed." << endl;
+                isAutoMode = true;
+
+            }            
+            
+               //nächsten Befehl ausführen
+            if ((cmd == "S" || cmd == "Step") && isAutoMode == false) {
+                cout << "Next step. Step " << ++step_counter << endl;
+
+            }
+            
+            //Was noch fehlt ist, dass der Prozess manuell ausgeführt wird oder eben automatisch per Signal
             //Schleife wird dann für die Simulation genutzt bei der die init.txt eingelesen wird und die Befehle die dort drinne stehen ausgeführt werden.
             while (true) {
                 init_data >> init_cmd;
@@ -73,14 +91,24 @@ int main(int argc, char** argv) {
 
 
                 if (init_cmd == 'A') {
-                    val += int_reg;
+                    //Wert hinter dem Befehl A wird ausgelesen und verrechnet
+                    init_data >> val;
+                    cout << val;
+                        
+                    int_reg += val;
                     cout << val;
                 }
 
                 if (init_cmd == 'D') {
-                    val -= int_reg;
+                    //Wert hinter dem Befehl D wird ausgelesen und verrechnet
+                    init_data >> val;
+                    cout << val;
+ 
+                    int_reg -= val;
                     cout << val;
                 }
+                
+                 //Stoppen
                 if (init_cmd == 'B' /*|| cmd == "Block"*/) {
                     cout << "Process blocked.";
                     //kill(getpid(), SIGSTOP);
@@ -98,9 +126,8 @@ int main(int argc, char** argv) {
 
                 cout << endl;
             }
-            read(fd[0], command, BUFFER_BIT);
-            string cmd = command;
-            //Stoppen
+           
+           
 
             //Weitermachen
             if (cmd == "U" || cmd == "Unblock") {
@@ -108,24 +135,14 @@ int main(int argc, char** argv) {
                 //                    kill(getpid(), SIGCONT);
             }
 
-            //Modus wechseln
-            if (cmd == "M" || cmd == "Mode") {
-                cout << "Mode changed." << endl;
-                isAutoMode = true;
 
-            }
-
-            //Aufgabe 3
-            /*Schreibe Programmverlauf in init*/
+/*            //Aufgabe 3
+            //Schreibe Programmverlauf in init
             if (cmd == "S" || cmd == "R" || cmd == "A" || cmd == "D" || cmd == "E" || cmd == "B") {
                 init_data << command << endl;
             }
-
-            //nächsten Befehl ausführen
-            if ((cmd == "S" || cmd == "Step") && isAutoMode == false) {
-                cout << "Next step. Step " << ++step_counter << endl;
-
-            }
+*/
+         
 
 
             if (cmd.find("R ") != string::npos) {
