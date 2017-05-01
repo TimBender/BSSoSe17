@@ -81,9 +81,9 @@ int main(int argc, char** argv)
 				}
 
 				if (((double)clock() / CLOCKS_PER_SEC) - process_start_time >= QUANTUM) // quantum exhausted
-				{ 
+				{
 					if (!non_blocked_processes.empty())
-					{ 
+					{
 						// test: cout << "TIME: " << ((double)clock() / CLOCKS_PER_SEC) - process_start_time << '\t' << "Quantum: " << QUANTUM;
 						non_blocked_processes.push_back(*currently_simulated_process); //current process is queued at the far end of the line 
 						buffer = non_blocked_processes.front();
@@ -141,8 +141,8 @@ int main(int argc, char** argv)
 					non_blocked_processes.push_front(*currently_simulated_process); //switched process will be queued as the next executable process in line
 
 					//delete process from the blocked processes queue
-					buffer = blocked_processes.front(); 
-					blocked_processes.pop_front(); 
+					buffer = blocked_processes.front();
+					blocked_processes.pop_front();
 
 					currently_simulated_process = &buffer; //current process equals the unblocked process
 				}
@@ -155,7 +155,7 @@ int main(int argc, char** argv)
 						exit(0); //return to parent 
 					}
 
-					if (next_idx  < currently_simulated_process->getInstructionMemory().size()) //executable command line exists
+					if (next_idx < currently_simulated_process->getInstructionMemory().size()) //executable command line exists
 					{
 						cout << "Next step. Step " << ++step_counter << endl; //print out current step 
 						++next_idx;
@@ -187,11 +187,80 @@ int main(int argc, char** argv)
 						case 'B': //Block simulated process
 							currently_simulated_process->block(); // switch process state to blocked
 							blocked_processes.push_back(*currently_simulated_process); //add to blocked processes queue
-						
+
 							if (!non_blocked_processes.empty()){ //there is at least one queued process ready to be executed
 								buffer = non_blocked_processes.front(); // scheduling descision: oldest queued process ready to be executed= current sim. process
-								currently_simulated_process = &buffer; 
-								next_idx = 0; 
+								currently_simulated_process = &buffer;
+								next_idx = 0;
+								non_blocked_processes.pop_front(); // remove from queue
+							}
+							else 	currently_simulated_process = nullptr; //no non-blocked processes available 
+
+							break;
+
+						case 'E': //Beende sim. Prozess
+							cout << "Terminated simulated process.\n";
+							exit(0); // back to parent
+							break;
+
+						case 'R': //neuer sim.Prozess + Datei ausfuehren
+						{
+									  SimulatedProcess new_process(0, file);
+									  pc_value++;
+									  program_counter = &pc_value;
+
+									  new_process.setIntegerRegsiter(*integer_register); //speichere Integerregister
+									  new_process.setProgramCounter(*program_counter); //speichere Programcounter
+
+									  non_blocked_processes.push_back(new_process); //aufnehmen in Schlange der nicht blockierten Prozesse				 
+						}
+							break;
+
+						default:
+							cout << "Sorry, unknown simulated CPU command. Please try again.\n";
+							break;
+						}
+					}
+					else exit(0); //alle Programm Instruktionen ausgefuehrt
+				}
+
+				// Automode is on
+				if (isAutoMode)
+				{
+					for (size_t i = 0; i < currently_simulated_process->getInstructionMemory().size(); i++)
+					{
+						auto instruction = currently_simulated_process->getInstructionMemory().at(i); //get next command line
+
+						/*extract n from command line*/
+						if (instruction[0] != 'E' && instruction[0] != 'B'){ //case: no n in command line
+							if (toupper(instruction[0]) != 'R') stringstream(instruction.substr(1, instruction.size() - 1)) >> value; // n= integer value
+							else stringstream(instruction.substr(2, instruction.size() - 1)) >> file; // n= file name
+						}
+
+						/*simulated CPU instruction set*/
+						switch (toupper(instruction[0])){
+						case 'S': //Init integer register	
+							integer_register = &value;
+							break;
+
+						case 'A': //Add to integer register value
+							current_int_reg_value += value;
+							integer_register = &current_int_reg_value;
+							break;
+
+						case 'D': //Subtract from integer register value
+							current_int_reg_value -= value;
+							integer_register = &current_int_reg_value;
+							break;
+
+						case 'B': //Block simulated process
+							currently_simulated_process->block(); // switch process state to blocked
+							blocked_processes.push_back(*currently_simulated_process); //add to blocked processes queue
+
+							if (!non_blocked_processes.empty()){ //there is at least one queued process ready to be executed
+								buffer = non_blocked_processes.front(); // scheduling descision: oldest queued process ready to be executed= current sim. process
+								currently_simulated_process = &buffer;
+								next_idx = 0;
 								non_blocked_processes.pop_front(); // remove from queue
 							}
 							else 	currently_simulated_process = nullptr; //no non-blocked processes available 
@@ -221,7 +290,7 @@ int main(int argc, char** argv)
 							break;
 						}
 					}
-					else exit(0); //alle Programm Instruktionen ausgefuehrt
+					exit(0);
 				}
 
 	}
