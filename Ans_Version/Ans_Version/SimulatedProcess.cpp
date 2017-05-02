@@ -17,13 +17,15 @@ double SimulatedProcess::get_cpu_time() const{
 SimulatedProcess::SimulatedProcess(const size_t& ppid, const string& file_name)
 :m_ppid(ppid), m_pid(ID_COUNTER++)
 {
-	std::ifstream file_data(file_name + ".txt");
+    string tmp = file_name + ".txt";
+	std::ifstream file_data(tmp.c_str());
 	m_prio = 0;
 	m_integer_register = 0;
 	m_programcounter = 0;
 	m_starting_time = (double)clock() / CLOCKS_PER_SEC;
 	string buffer = "", content;
 	if (file_data.good()){
+            cout << "Data good" << std::endl;
 		while (getline(file_data, buffer)){
 			instruction_memory.push_back(buffer);
 			cout << buffer << '\n';
@@ -33,7 +35,8 @@ SimulatedProcess::SimulatedProcess(const size_t& ppid, const string& file_name)
 SimulatedProcess::SimulatedProcess(const size_t& ppid, const int& prio, const string& file_name)
 :m_ppid(ppid), m_prio(prio), m_pid(ID_COUNTER++)
 {
-	std::ifstream file_data(file_name + ".txt");
+	string tmp = file_name + ".txt";
+	std::ifstream file_data(tmp.c_str());
 	m_prio = 0;
 	m_integer_register = 0;
 	m_programcounter = 0;

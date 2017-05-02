@@ -1,5 +1,5 @@
-#ifndef SimulatedProcess_H
-#define SimulatedProcess_H
+#ifndef SIMULATEDPROCESS_H
+#define SIMULATEDPROCESS_H
 
 #include<ctime>
 #include<iostream>
@@ -8,6 +8,7 @@
 #include<fstream>
 #include<list>
 #include<vector>
+
 using std::vector;
 using std::list;
 using std::string;
@@ -40,3 +41,5 @@ private:
 	bool m_isActive = true;
 
 };
+
+#endif 
