@@ -152,7 +152,10 @@ void simulatedCPU() {
 //alarm check
 //Hier die simulatedCPU() aufrufen wenn AUTO_MODE aktiv ist und DebugPrint
 void stepHandler(int i) {
-    if (IS_AUTO_MODE) simulatedCPU();
+    if (IS_AUTO_MODE){
+        simulatedCPU();
+        alarm ( 1 );
+    }
     cout << "Handler wurde aufgerufen" << endl;
 }
 
@@ -262,10 +265,10 @@ int main(int argc, char** argv) {
                 }
 
                 // Automode is on (alte Variante)
-                if (IS_AUTO_MODE) {
-                    alarm( 1 );
+//                if (IS_AUTO_MODE) {
+//                    alarm( 1 );
 //                    simulatedCPU();
-                }
+//                }
             }
             exit(0);
 
