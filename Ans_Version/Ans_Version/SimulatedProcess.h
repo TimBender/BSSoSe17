@@ -23,7 +23,7 @@ public:
 	SimulatedProcess(const size_t& ppid, const string& file_name);
 	SimulatedProcess(const size_t& ppid, const int& prio, const string& file_name);
 	time_t getStartingTime() const;
-	void  block();
+	void  block(int index);
 	void unblock();
 	double get_cpu_time()const;
 	bool getIsBlocked()const{ return !m_isActive; }
@@ -31,7 +31,8 @@ public:
 	void setProgramCounter(const int& value){ m_programcounter = value; }
 	int getIntegerRegister() const { return m_integer_register; }
 	vector<string> getInstructionMemory()const{ return instruction_memory; }
-	~SimulatedProcess(){};
+	~SimulatedProcess(){}
+        int getBlockedIndex() const;;
 private:
 	vector<string> instruction_memory;
 	int m_prio;
@@ -39,6 +40,7 @@ private:
 	time_t m_starting_time;
 	size_t m_pid, m_ppid;
 	bool m_isActive = true;
+        int blockedIndex = 0; //Index des geblocketen Prozesses
 
 };
 

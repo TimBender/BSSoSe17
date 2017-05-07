@@ -2,11 +2,13 @@
 #include<iomanip>
 unsigned int SimulatedProcess::ID_COUNTER = 0;
 
+
+
 std::ostream& operator<<(std::ostream &os, const SimulatedProcess& obj)
 {
 	os << "pid" << std::setw(10) << "ppid" << std::setw(10) << "priority" << '\t' << std::setw(10) << "value" << std::setw(20) << "start time" << std::setw(10) << "PC" << std::setw(30) << "CPU time used so far" << '\n';
 	os << obj.m_pid << std::setw(10) << obj.m_ppid << std::setw(10) << obj.m_prio << '\t' << std::setw(10) << obj.m_integer_register << std::setw(20) << obj.m_starting_time << std::setw(10) << obj.m_programcounter << std::setw(30) << static_cast<int>(obj.get_cpu_time() - obj.m_starting_time);
-
+        os << std::endl << std::endl;
 	return os;
 }
 
@@ -28,9 +30,13 @@ SimulatedProcess::SimulatedProcess(const size_t& ppid, const string& file_name)
             cout << "Data good" << std::endl;
 		while (getline(file_data, buffer)){
 			instruction_memory.push_back(buffer);
-			cout << buffer << '\n';
+			//cout << buffer << '\n';
 		}
 	}
+}
+
+int SimulatedProcess::getBlockedIndex() const {
+    return blockedIndex;
 }
 SimulatedProcess::SimulatedProcess(const size_t& ppid, const int& prio, const string& file_name)
 :m_ppid(ppid), m_prio(prio), m_pid(ID_COUNTER++)
@@ -45,7 +51,7 @@ SimulatedProcess::SimulatedProcess(const size_t& ppid, const int& prio, const st
 	if (file_data.good()){
 		while (getline(file_data, buffer)){
 			instruction_memory.push_back(buffer);
-			cout << buffer << '\n';
+			//cout << buffer << '\n';
 		}
 	}
 }
@@ -55,10 +61,11 @@ time_t SimulatedProcess::getStartingTime() const
 	return m_starting_time;
 }
 
-void SimulatedProcess::block(){
+void SimulatedProcess::block(int index){
 	if (m_isActive){
 		m_isActive = false;
 		cout << "Simulated process is blocked.\n";
+                blockedIndex = index;
 	}
 	else cout << "Sorry, simulated process is already blocked.\n";
 }
