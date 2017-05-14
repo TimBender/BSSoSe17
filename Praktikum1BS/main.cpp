@@ -58,263 +58,261 @@ bool IS_AUTO_MODE = false;
 //increments steps and returns quantum exhaustion state
 
 static bool IS_QUANTUM_OVER() {
-    PROCESS_STEPS++;
-    if (PROCESS_STEPS >= QUANTUM) {
-        PROCESS_STEPS = 0;
-        return true;
-    }
-    return false;
+	PROCESS_STEPS++;
+	if (PROCESS_STEPS >= QUANTUM) {
+		PROCESS_STEPS = 0;
+		return true;
+	}
+	return false;
 }
 
 
 
 void simulatedCPU() {
-//all blocked
-    if (currently_simulated_process->getIsBlocked()) { // Commandant has to UNBLOCK process
-        cout << "Sorry, this simulated process is currently blocked. Unblock it and try again.\n";
-        exit(0); //return to parent 
-    }
+	//all blocked
+	if (currently_simulated_process->getIsBlocked()) { // Commandant has to UNBLOCK process
+		cout << "Sorry, this simulated process is currently blocked. Unblock it and try again.\n";
+		exit(0); //return to parent 
+	}
 
-    if (CURRENT_STEP< currently_simulated_process->getInstructionMemory().size()) //executable command line exists
-    {
-        cout << "Next step. Step " << ++step_counter << endl; //print out current step 
-        CURRENT_STEP++;
-    }
-    string instruction;
-    try {
-    instruction = currently_simulated_process->getInstructionMemory().at(CURRENT_STEP-1); //get next command line       
-    }catch(const std::out_of_range& o){
-        cout<<"blaaaah: "<< currently_simulated_process->getInstructionMemory().size()<<endl;
-    
-   }
-    /*extract n from command line*/
-    if (instruction[0] != 'E' && instruction[0] != 'B') { //case: no n in command line
-        if (toupper(instruction[0]) != 'R') stringstream(instruction.substr(1, instruction.size() - 1)) >> value; // n= integer value
-        else stringstream(instruction.substr(2, instruction.size() - 1)) >> file; // n= file name
-    }
+	if (CURRENT_STEP < currently_simulated_process->getInstructionMemory().size()) //executable command line exists
+	{
+		cout << "Next step. Step " << ++step_counter << endl; //print out current step 
+		CURRENT_STEP++;
+	}
+	string instruction;
+	try {
+		instruction = currently_simulated_process->getInstructionMemory().at(CURRENT_STEP - 1); //get next command line       
+	}
+	catch (const std::out_of_range& o){
+		cout << "blaaaah: " << currently_simulated_process->getInstructionMemory().size() << endl;
 
-    /*simulated CPU instruction set*/
-    switch (toupper(instruction[0])) {
-        case 'S': //Init integer register	
-            integer_register = &value;
-            break;
+	}
+	/*extract n from command line*/
+	if (instruction[0] != 'E' && instruction[0] != 'B') { //case: no n in command line
+		if (toupper(instruction[0]) != 'R') stringstream(instruction.substr(1, instruction.size() - 1)) >> value; // n= integer value
+		else stringstream(instruction.substr(2, instruction.size() - 1)) >> file; // n= file name
+	}
 
-        case 'A': //Add to integer register value
-            current_int_reg_value += value;
-            integer_register = &current_int_reg_value;
-            break;
+	/*simulated CPU instruction set*/
+	switch (toupper(instruction[0])) {
+	case 'S': //Init integer register	
+		integer_register = &value;
+		break;
 
-        case 'D': //Subtract from integer register value
-            current_int_reg_value -= value;
-            integer_register = &current_int_reg_value;
-            break;
+	case 'A': //Add to integer register value
+		current_int_reg_value += value;
+		integer_register = &current_int_reg_value;
+		break;
 
-        case 'B': //Block simulated process
-            currently_simulated_process->block(); // switch process state to blocked
-            blocked_processes.push_back(*currently_simulated_process); //add to blocked processes queue
+	case 'D': //Subtract from integer register value
+		current_int_reg_value -= value;
+		integer_register = &current_int_reg_value;
+		break;
 
-            if (!non_blocked_processes.empty()) { //there is at least one queued process ready to be executed
-                buffer = non_blocked_processes.front(); // scheduling descision: oldest queued process ready to be executed= current sim. process
-                currently_simulated_process = &buffer;
-                CURRENT_STEP= 0;
-                non_blocked_processes.pop_front(); // remove from queue
-            } else currently_simulated_process = NULL; //no non-blocked processes available 
+	case 'B': //Block simulated process
+		currently_simulated_process->block(); // switch process state to blocked
+		blocked_processes.push_back(*currently_simulated_process); //add to blocked processes queue
 
-            break;
+		if (!non_blocked_processes.empty()) { //there is at least one queued process ready to be executed
+			buffer = non_blocked_processes.front(); // scheduling descision: oldest queued process ready to be executed= current sim. process
+			currently_simulated_process = &buffer;
+			CURRENT_STEP = 0;
+			non_blocked_processes.pop_front(); // remove from queue
+		}
+		else currently_simulated_process = NULL; //no non-blocked processes available 
 
-        case 'E': //Beende sim. Prozess
-            cout << "Terminated simulated process.\n";
-            exit(0);
-            break;
+		break;
 
-        case 'R': //neuer sim.Prozess + Datei ausfuehren
-        {
-            SimulatedProcess new_process(0, file);
-            pc_value++;
-            program_counter = &pc_value;
+	case 'E': //Beende sim. Prozess
+		cout << "Terminated simulated process.\n";
+		exit(0);
+		break;
 
-            new_process.setIntegerRegsiter(*integer_register); //speichere Integerregister
-            new_process.setProgramCounter(*program_counter); //speichere Programcounter
+	case 'R': //neuer sim.Prozess + Datei ausfuehren
+	{
+				  SimulatedProcess new_process(0, file);
+				  pc_value++;
+				  program_counter = &pc_value;
 
-            non_blocked_processes.push_back(new_process); //aufnehmen in Schlange der nicht blockierten Prozesse	
-    
-        }
-            break;
-        default:
-            cout << "Sorry, unknown simulated CPU command. Please try again.\n";
-            break;
-    }
-    cout<<*currently_simulated_process<<endl;
-    cout<< instruction<<endl;
+				  new_process.setIntegerRegsiter(*integer_register); //speichere Integerregister
+				  new_process.setProgramCounter(*program_counter); //speichere Programcounter
+
+				  non_blocked_processes.push_back(new_process); //aufnehmen in Schlange der nicht blockierten Prozesse	
+
+	}
+		break;
+	default:
+		cout << "Sorry, unknown simulated CPU command. Please try again.\n";
+		break;
+	}
+	cout << *currently_simulated_process << endl;
+	cout << instruction << endl;
 
 }
 
 //alarm check
 //Hier die simulatedCPU() aufrufen wenn AUTO_MODE aktiv ist und DebugPrint
 void stepHandler(int i) {
-    if (IS_AUTO_MODE){
-        simulatedCPU();
-        alarm ( 1 );
-    }
-    cout << "Handler wurde aufgerufen" << endl;
+	if (IS_AUTO_MODE){
+		simulatedCPU();
+		alarm(1);
+	}
+	cout << "Handler wurde aufgerufen" << endl;
 }
 
 int main(int argc, char** argv) {
-    int status;
+	int status;
 
-    pipe(fd);
+	pipe(fd);
 
-    /*create copy*/
-    int pm_id;
-    char command[BUFFER_BIT];
-    string cmd;
-    switch (pm_id = fork()) {
-        case -1: //forking failed
-            cerr << "ERROR_forking failed.\n";
-            break;
+	/*create copy*/
+	int pm_id;
+	char command[BUFFER_BIT];
+	string cmd;
+	switch (pm_id = fork()) {
+	case -1: //forking failed
+		cerr << "ERROR_forking failed.\n";
+		break;
 
-        case 0: //child
-        {
+	case 0: //child
+	{
 
-            signal(SIGALRM, stepHandler);
-            while (true) {
-                read(fd[0], command, BUFFER_BIT);
-                cmd = command;
+				signal(SIGALRM, stepHandler);
+				while (true) {
+					read(fd[0], command, BUFFER_BIT);
+					cmd = command;
 
+					//read from pipe
+					currently_simulated_process = &sim_process; //program start: init is the initially executed program
 
+					//ROUND- ROBIN SCHEDULING: set starting/ reset process timer
+					if (IS_QUANTUM_OVER()) // quantum exhausted
+					{
+						if (!non_blocked_processes.empty()) {
 
-                //read from pipe
+							non_blocked_processes.push_back(*currently_simulated_process); //current process is queued at the far end of the line 
+							buffer = non_blocked_processes.front();
+							currently_simulated_process = &buffer; //switch with oldest queued (ready-to-execute) process 
+							non_blocked_processes.pop_front(); //remove from queue
 
+						}
+					}
 
-                currently_simulated_process = &sim_process; //program start: init is the initially executed program
+					/*User, Commandant, Processmanager commands*/
 
-                //ROUND- ROBIN SCHEDULING: set starting/ reset process timer
-                if (IS_QUANTUM_OVER()) // quantum exhausted
-                {
-                    if (!non_blocked_processes.empty()) {
+					//Reporter process: print out process data
+					if (cmd == "P" || cmd == "Print") {
+						int rep_id = fork();
+						switch (rep_id) {
+						case 0: //Reporter
+							cout << "\n___________________________________________________________________________________________________________\n";
+							cout << "The current system state is as follows :\n";
+							cout << "_____________________________________________________________________________________________________________\n\n";
 
-                        non_blocked_processes.push_back(*currently_simulated_process); //current process is queued at the far end of the line 
-                        buffer = non_blocked_processes.front();
-                        currently_simulated_process = &buffer; //switch with oldest queued (ready-to-execute) process 
-                        non_blocked_processes.pop_front(); //remove from queue
+							cout << "Current time: " << (double)clock() / CLOCKS_PER_SEC << "\n\n";
+							cout << "-------------------------------------------------------------------------------------------------------------\n";
+							cout << "RUNNING PROCESS:\n";
+							cout << sim_process << '\n';
+							cout << "-------------------------------------------------------------------------------------------------------------\n";
+							cout << "BLOCKED PROCESSES:\n";
+							for (auto& process : blocked_processes) {
+								cout << process;
+							}
+							cout << "-------------------------------------------------------------------------------------------------------------\n";
+							cout << "PROCESSES READY TO EXECUTE:\n";
+							for (auto& process : non_blocked_processes) {
+								cout << process;
+							}
+							cout << endl;
 
-                    }
-                }
+							//system("ps aux | less"); //running processes: ok?
+							exit(0);
+							break;
+						default: //parent
+							wait(&status);
+							break;
+						}
+					}
 
-                /*User, Commandant, Processmanager commands*/
+					//switch modes: debug to auto
+					if (cmd == "M" || cmd == "Mode") {
+						cout << "Mode changed." << endl;
+						if (!IS_AUTO_MODE){
+							IS_AUTO_MODE = true;
+							alarm(1);
+						}
+						else IS_AUTO_MODE = false;
+					}
 
-                //Reporter process: print out process data
-                if (cmd == "P" || cmd == "Print") {
-                    int rep_id = fork();
-                    switch (rep_id) {
-                        case 0: //Reporter
-                            cout << "\n___________________________________________________________________________________________________________\n";
-                            cout << "The current system state is as follows :\n";
-                            cout << "_____________________________________________________________________________________________________________\n\n";
+					//unblock oldest blocked process: scheduling descision= process switch: current simulated process will be replaced by unblocked process
+					if (cmd == "U" || cmd == "Unblock") {
+						blocked_processes.front().unblock(); //change status from blocked to unblock
+						non_blocked_processes.push_front(*currently_simulated_process); //switched process will be queued as the next executable process in line
 
-                            cout << "Current time: " << (double) clock() / CLOCKS_PER_SEC << "\n\n";
-                            cout << "-------------------------------------------------------------------------------------------------------------\n";
-                            cout << "RUNNING PROCESS:\n";
-                            cout << sim_process << '\n';
-                            cout << "-------------------------------------------------------------------------------------------------------------\n";
-                            cout << "BLOCKED PROCESSES:\n";
-                            for (auto& process : blocked_processes) {
-                                cout << process;
-                            }
-                            cout << "-------------------------------------------------------------------------------------------------------------\n";
-                            cout << "PROCESSES READY TO EXECUTE:\n";
-                            for (auto& process : non_blocked_processes) {
-                                cout << process;
-                            }
-                            cout << endl;
+						//delete process from the blocked processes queue
+						buffer = blocked_processes.front();
+						blocked_processes.pop_front();
 
-                            //system("ps aux | less"); //running processes: ok?
-                            exit(0);
-                            break;
-                        default: //parent
-                            wait(&status);
-                            break;
-                    }
-                }
+						currently_simulated_process = &buffer; //current process equals the unblocked process
+					}
 
-                //switch modes: debug to auto
-                if (cmd == "M" || cmd == "Mode") {
-                    cout << "Mode changed." << endl;
-                    if (!IS_AUTO_MODE){
-                        IS_AUTO_MODE = true;
-                        alarm( 1 );
-                    }
-                    else IS_AUTO_MODE = false;
-                }
+					//Step: executed next command line
+					if ((cmd == "S" || cmd == "Step") && IS_AUTO_MODE == false) {
+						simulatedCPU();
+					}
 
-                //unblock oldest blocked process: scheduling descision= process switch: current simulated process will be replaced by unblocked process
-                if (cmd == "U" || cmd == "Unblock") {
-                    blocked_processes.front().unblock(); //change status from blocked to unblock
-                    non_blocked_processes.push_front(*currently_simulated_process); //switched process will be queued as the next executable process in line
-
-                    //delete process from the blocked processes queue
-                    buffer = blocked_processes.front();
-                    blocked_processes.pop_front();
-
-                    currently_simulated_process = &buffer; //current process equals the unblocked process
-                }
-
-                //Step: executed next command line
-                if ((cmd == "S" || cmd == "Step") && IS_AUTO_MODE == false) {
-                   simulatedCPU();
-                }
-
-                // Automode is on (alte Variante)
-//                if (IS_AUTO_MODE) {
-//                    alarm( 1 );
-//                    simulatedCPU();
-//                }
-            }
-            exit(0);
+					// Automode is on (alte Variante)
+					//                if (IS_AUTO_MODE) {
+					//                    alarm( 1 );
+					//                    simulatedCPU();
+					//                }
+				}
+				//exit(0);
 
 
-        }
-            break;
+	}
+		break;
 
-        default: //parent
-        {
+	default: //parent
+	{
 
-            string buffer;
-            while (true) {
+				 string buffer;
+				 while (true) {
 
 
-                cout << "Command: ";
-                cin.getline(command, BUFFER_BIT);
+					 cout << "Command: ";
+					 cin.getline(command, BUFFER_BIT);
 
-                buffer = command;
+					 buffer = command;
 
-                if (buffer == "Q" || buffer == "Quit") {
-                    //terminate
+					 if (buffer == "Q" || buffer == "Quit") {
+						 //terminate
 
-//                    float median_durchlaufzeit = 0.0f; //average elapsed (processor) time
-//
-//                    for (auto process : non_blocked_processes) {
-//                        median_durchlaufzeit += (process.get_cpu_time() - process.getStartingTime());
-//                    }
-//                    for (auto process : blocked_processes) {
-//                        median_durchlaufzeit += (process.get_cpu_time() - process.getStartingTime());
-//                    }
-//
-//                    median_durchlaufzeit = median_durchlaufzeit / (blocked_processes.size() + non_blocked_processes.size());
-//                    cout << "Durchlaufzeit: " << median_durchlaufzeit << '\n';
-//
-                    wait(&status);
-                    return 0;
-                }
-                /*write to pipe*/
-                write(fd[1], command, BUFFER_BIT);
-            }
+						 //                    float median_durchlaufzeit = 0.0f; //average elapsed (processor) time
+						 //
+						 //                    for (auto process : non_blocked_processes) {
+						 //                        median_durchlaufzeit += (process.get_cpu_time() - process.getStartingTime());
+						 //                    }
+						 //                    for (auto process : blocked_processes) {
+						 //                        median_durchlaufzeit += (process.get_cpu_time() - process.getStartingTime());
+						 //                    }
+						 //
+						 //                    median_durchlaufzeit = median_durchlaufzeit / (blocked_processes.size() + non_blocked_processes.size());
+						 //                    cout << "Durchlaufzeit: " << median_durchlaufzeit << '\n';
+						 //
+						 wait(&status);
+						 return 0;
+					 }
+					 /*write to pipe*/
+					 write(fd[1], command, BUFFER_BIT);
+				 }
 
-            
-        }
-            break;
-    }
-    cout << "\n";
 
-    return 0;
+	}
+		break;
+	}
+	cout << "\n";
+
+	return 0;
 }
