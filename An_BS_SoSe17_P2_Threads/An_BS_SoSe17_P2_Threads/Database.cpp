@@ -36,15 +36,13 @@ bool Database::write(int writerID) {
 	std::ifstream inputStream(inputFileName);
 	if (!inputStream.good()) {
 		std::cerr << "Writer " << writerID
-			<< " could not open input file (filename = " << inputFileName
-			<< ")!" << std::endl;
+			<< inputFileName << ".txt not found.\n\n";
 		return (everything_ok = false);
 	};
 	std::ofstream outputStream(outputFileName);
 	if (!outputStream.good()) {
 		std::cerr << "Writer " << writerID
-			<< " could not open output file (filename = " << outputFileName
-			<< ")!" << std::endl;
+			<< outputFileName << ".txt not found.\n\n";
 		return (everything_ok = false);
 	};
 
@@ -111,14 +109,15 @@ bool Database::read(int readerID) {
 	};
 
 	// read all the other lines, checking the order
-	while (inputStream >> newLine) {
+	while (inputStream >> newLine) 
+	{
 		// compare the new line to the old line, see if they're in alphabetical order
-		if (newLine <= oldLine) {
+		if (newLine <= oldLine) { // asc a-z
 			std::cout << "READER " << readerID
 				<< ": Problem - \"" << oldLine
 				<< "\" and \"" << newLine
 				<< "\" are not correctly ordered!" << std::endl;
-			everything_ok = false;
+			everything_ok = false; //not in alphabetical order
 		} // end if not OK
 
 		oldLine = newLine;
