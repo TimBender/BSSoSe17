@@ -1,10 +1,8 @@
-﻿Der Buildvorgang wurde am 14.05.2017 14:19:36 gestartet.
+﻿Der Buildvorgang wurde am 14.05.2017 16:29:03 gestartet.
      1>Projekt "C:\Users\TrAn\Desktop\BS_SoSe17_finale\BSSoSe17\An_BS_SoSe17_P2_Threads\An_BS_SoSe17_P2_Threads\An_BS_SoSe17_P2_Threads.vcxproj" auf Knoten "2", Build Ziel(e).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ReaderWriterThreads.cpp reader_writer_problem.cpp
-         reader_writer_problem.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt ReaderWriterThreads.cpp
          ReaderWriterThreads.cpp
-         Code wird generiert...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\TrAn\Desktop\BS_SoSe17_finale\BSSoSe17\An_BS_SoSe17_P2_Threads\Debug\An_BS_SoSe17_P2_Threads.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\TrAn\Desktop\BS_SoSe17_finale\BSSoSe17\An_BS_SoSe17_P2_Threads\Debug\An_BS_SoSe17_P2_Threads.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\TrAn\Desktop\BS_SoSe17_finale\BSSoSe17\An_BS_SoSe17_P2_Threads\Debug\An_BS_SoSe17_P2_Threads.lib" /MACHINE:X86 Debug\Database.obj
          Debug\ReaderWriterThreads.obj
@@ -14,4 +12,4 @@
 
 Build erfolgreich.
 
-Verstrichene Zeit 00:00:04.12
+Verstrichene Zeit 00:00:01.97

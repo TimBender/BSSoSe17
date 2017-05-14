@@ -29,37 +29,31 @@ int main(int argc, char** argv)
 	//vector<thread> r_thread = vector<thread>((NUM_OF_THREADS), thread(reader)); //reading function
 	//vector<thread> w_thread = vector<thread>((NUM_OF_THREADS* 9), thread(writer)); //writing function
 
-	try
-	{
+
 	/*create all threads*/
 	//push reader threads into verctor
-	for (std::thread& r_thread : r_threads){
-		r_thread = thread(reader, r_counter++, MAX_TIME);
-		r_thread.join();
+	for (size_t i = 0; i < r_threads.size(); i++){
+		r_threads[i] = thread(reader, r_counter++, MAX_TIME);
 	}
 
 	//push writer threads into verctor
+	for (size_t i = 0; i < w_threads.size(); i++){
+		w_threads[i] = thread(writer, w_counter++, MAX_TIME);
+	}
+	std::cout << "Finished creating all threads..." << std::endl << std::endl;
+
+	// wait for all threads to terminate
+	for (std::thread& r_thread : r_threads){
+		r_thread.join();
+	}
+
 	for (std::thread& w_thread : w_threads){
-		w_thread = thread(writer, w_counter++, MAX_TIME);
 		w_thread.join();
 	}
 
-	// wait for all threads to terminate
-	//try{
-	//	for (std::thread& r_thread : r_threads){
-	//		r_thread.join();
-	//	}
+	cout << "All thread executions are completed.\n";
+	cout << "\n\n_____________________________________________\n";
+	theDatabase.printStatistics();
 
-	//	for (std::thread& w_thread : w_threads){
-	//		w_thread.join();
-	//	}
-
-		cout << "All thread executions are completed.\n";
-		cout << "\n\n_____________________________________________\n";
-		theDatabase.printStatistics();
-	}
-	catch (const invalid_argument & eo){
-		cerr << "thread object is not joinable: " << eo.what() << "\n";
-	}
 	return 0;
 }

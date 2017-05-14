@@ -1,10 +1,19 @@
 #include "ReaderWriterThreads.h"
 #include "Database.h"
-
+#include <stdio.h>
 #include <iostream>			// for std::cin, cerr, cout ...
 #include <thread>			// for std::this_thread
 #include <chrono>			// for std::chrono... 
+#include<mutex>
 
+typedef int semaphore;
+
+std::mutex shared_mutex_db;
+std::mutex rc_mutex;
+//semaphore rc_mutex = 1;
+//semaphore db = 1;
+int rc = 0;
+//QJPBG-JCN2K-X2YGV-C9HXY-7MJQF
 // ******** reader & writer threads ******** 
 
 // The writer thread
@@ -19,7 +28,11 @@ void writer(int writerID, int numSeconds) {
 	//timeslot not exhausted 
 	while ((std::chrono::steady_clock::now() - startTime) < maxTime) 
 	{ 
+		sem_wait(&db);
+		shared_mutex_db.lock(); //writer braucht exklusiven Zugriff
 		bool result = theDatabase.write(writerID);
+		shared_mutex_db.unlock(); //exklusiven Zugriff wieder freigeben
+
 		++tests;
 
 		// sleep a while...
@@ -51,10 +64,19 @@ void reader(int readerID, int numSeconds) {
 	auto startTime = std::chrono::steady_clock::now();
 	std::chrono::seconds maxTime(numSeconds);
 	while ((std::chrono::steady_clock::now() - startTime) < maxTime) {
+		rc_mutex.lock(); //exklusiver Zugriff fuer reader counter/rc
+		rc++;
+		if (rc == 1) shared_mutex_db.lock(); //1.Reader => lock DB
+		rc_mutex.unlock();
 
+		//Read from database
 		bool result = theDatabase.read(readerID);
 		++tests;
-
+	
+		rc_mutex.lock(); //exklusiver Zugriff auf reader counter
+		rc--;
+		if (rc == 0) shared_mutex_db.unlock(); //unlock DB, when last reader thread has finished
+		rc_mutex.unlock();
 		// sleep a while...
 		//int numSeconds2sleep = randomInt(3); // i.e. either 0, 1 or 2 
 		int numSeconds2sleep = 1;
