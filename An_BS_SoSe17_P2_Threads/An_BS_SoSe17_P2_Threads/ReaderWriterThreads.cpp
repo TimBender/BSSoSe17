@@ -1,12 +1,9 @@
 #include "ReaderWriterThreads.h"
+#include "Database.h"
 
 #include <iostream>			// for std::cin, cerr, cout ...
 #include <thread>			// for std::this_thread
 #include <chrono>			// for std::chrono... 
-
-#include "database.h"
-
-
 
 // ******** reader & writer threads ******** 
 

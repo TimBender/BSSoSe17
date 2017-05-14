@@ -1,8 +1,8 @@
 #pragma once
-#include "Stopwatch.h"  // for the Stopwatch class
 
-#include <string>		// for std::string
-#include <iostream>		// for std::cerr
+#include "Stopwatch.h"  
+#include <string>		
+#include <iostream>		
 #include <cstdlib>		// for exit()
 
 class Database

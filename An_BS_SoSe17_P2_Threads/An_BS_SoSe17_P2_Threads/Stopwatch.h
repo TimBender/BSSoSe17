@@ -1,10 +1,10 @@
-#include <chrono>	// for std::chrono, of course...
-
 #pragma once
+
+#include <chrono>
+
 
 class Stopwatch
 {
-	// Note: There is no file stopwatch.cpp - it's all here, in this file!
 private:
 	// note usage of new C++11 { initializations }
 	typedef std::chrono::steady_clock		clock;

@@ -7,8 +7,6 @@
 #include <cassert>			// for assert
 #include <string>			// for std::string
 
-#include "Database.h"
-
 // ******** Database class ********
 
 // Static (global) variables & constants
