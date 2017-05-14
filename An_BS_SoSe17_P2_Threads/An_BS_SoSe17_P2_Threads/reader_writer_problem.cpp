@@ -11,13 +11,13 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-	const size_t NUM_OF_THREADS = 22; //number of writing threads
-	int r_counter = 1, w_counter = 1, MAX_TIME = 40;
+	const size_t NUM_OF_THREADS = 4; //number of writing threads
+	int r_counter = 1, w_counter = 1, MAX_TIME = 20;
 
 	/*first test round: 9:1 ratio (r_threads:w_threads)*/
 
-	vector<thread> r_thread((NUM_OF_THREADS * 9), thread(reader,r_counter++,MAX_TIME)); //reading function
-	//vector<thread> w_thread = vector<thread>((NUM_OF_THREADS), thread(writer, w_counter++, MAX_TIME)); //writing function
+	vector<thread> r_threads(NUM_OF_THREADS * 9); //reading function
+	vector<thread> w_threads = vector<thread>(NUM_OF_THREADS); //writing function
 
 	/*second test round: 1:1 ratio (r_threads:w_threads)*/
 
@@ -30,10 +30,22 @@ int main(int argc, char** argv)
 	//vector<thread> w_thread = vector<thread>((NUM_OF_THREADS* 9), thread(writer)); //writing function
 
 
-	// wait for all threads to terminate
+	//push reader threads into verctor
+	for (auto &r_thread : r_threads){
+		r_thread = thread(reader, r_counter++, MAX_TIME);
+	}
 
-	try{ //all threads could be joined
-		for (auto &current_thread : r_thread){
+	//push writer threads into verctor
+	for (auto &w_thread : w_threads){
+		thread(writer, w_counter++, MAX_TIME);
+	}
+
+
+
+
+	// wait for all threads to terminate
+	try{
+		for (auto &current_thread : r_threads){
 			current_thread.join();
 		}
 

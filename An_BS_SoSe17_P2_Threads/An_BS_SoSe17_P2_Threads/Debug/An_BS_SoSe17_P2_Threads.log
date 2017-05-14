@@ -1,37 +1,15 @@
-﻿Der Buildvorgang wurde am 03.05.2017 19:52:30 gestartet.
-     1>Projekt "c:\Users\TrAn\documents\visual studio 2013\Projects\An_BS_SoSe17_P2_Threads\An_BS_SoSe17_P2_Threads\An_BS_SoSe17_P2_Threads.vcxproj" auf Knoten "2", Build Ziel(e).
+﻿Der Buildvorgang wurde am 14.05.2017 11:45:19 gestartet.
+     1>Projekt "C:\Users\TrAn\Desktop\BS_SoSe17_finale\BSSoSe17\An_BS_SoSe17_P2_Threads\An_BS_SoSe17_P2_Threads\An_BS_SoSe17_P2_Threads.vcxproj" auf Knoten "2", Build Ziel(e).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt reader_writer_problem.cpp
          reader_writer_problem.cpp
-     1>c:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory0(593): error C2280: 'std::thread::thread(const std::thread &)' : Es wurde versucht, auf eine gelöschte Funktion zu verweisen
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\thread(70): Siehe Deklaration von 'std::thread::thread'
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory0(592): Bei der Kompilierung der  Klassen-template der void std::allocator<_Ty>::construct(_Ty *,const _Ty &)-Memberfunktion
-                 with
-                 [
-                     _Ty=std::thread
-                 ]
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\xmemory0(723): Siehe Verweis auf die Instanziierung der gerade kompilierten Funktions-template "void std::allocator<_Ty>::construct(_Ty *,const _Ty &)".
-                 with
-                 [
-                     _Ty=std::thread
-                 ]
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\type_traits(572): Siehe Verweis auf die Instanziierung der gerade kompilierten Klassen-template "std::allocator<_Ty>".
-                 with
-                 [
-                     _Ty=std::thread
-                 ]
-                 c:\program files (x86)\microsoft visual studio 12.0\vc\include\vector(650): Siehe Verweis auf die Instanziierung der gerade kompilierten Klassen-template "std::is_empty<_Alloc>".
-                 with
-                 [
-                     _Alloc=std::allocator<std::thread>
-                 ]
-                 c:\users\tran\documents\visual studio 2013\projects\an_bs_sose17_p2_threads\an_bs_sose17_p2_threads\reader_writer_problem.cpp(19): Siehe Verweis auf die Instanziierung der gerade kompilierten Klassen-template "std::vector<std::thread,std::allocator<_Ty>>".
-                 with
-                 [
-                     _Ty=std::thread
-                 ]
-     1>Die Erstellung des Projekts "c:\Users\TrAn\documents\visual studio 2013\Projects\An_BS_SoSe17_P2_Threads\An_BS_SoSe17_P2_Threads\An_BS_SoSe17_P2_Threads.vcxproj" ist abgeschlossen, Build Ziel(e) -- FEHLER.
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\TrAn\Desktop\BS_SoSe17_finale\BSSoSe17\An_BS_SoSe17_P2_Threads\Debug\An_BS_SoSe17_P2_Threads.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\TrAn\Desktop\BS_SoSe17_finale\BSSoSe17\An_BS_SoSe17_P2_Threads\Debug\An_BS_SoSe17_P2_Threads.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\TrAn\Desktop\BS_SoSe17_finale\BSSoSe17\An_BS_SoSe17_P2_Threads\Debug\An_BS_SoSe17_P2_Threads.lib" /MACHINE:X86 Debug\Database.obj
+         Debug\ReaderWriterThreads.obj
+         Debug\reader_writer_problem.obj
+         An_BS_SoSe17_P2_Threads.vcxproj -> C:\Users\TrAn\Desktop\BS_SoSe17_finale\BSSoSe17\An_BS_SoSe17_P2_Threads\Debug\An_BS_SoSe17_P2_Threads.exe
+     1>Die Erstellung des Projekts "C:\Users\TrAn\Desktop\BS_SoSe17_finale\BSSoSe17\An_BS_SoSe17_P2_Threads\An_BS_SoSe17_P2_Threads\An_BS_SoSe17_P2_Threads.vcxproj" ist abgeschlossen, Build Ziel(e).
 
-Fehler beim Buildvorgang.
+Build erfolgreich.
 
-Verstrichene Zeit 00:00:02.71
+Verstrichene Zeit 00:00:02.49
