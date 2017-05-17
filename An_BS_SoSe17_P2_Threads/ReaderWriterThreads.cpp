@@ -162,7 +162,7 @@ void fairReader(int readerID, int numSeconds) {
 		sem_wait(&fifoQueue);	//wait in line to be served
 		sem_wait(&fair_mutex);	//exklusiver Zugriff fuer reader counter/rc
 		rc++;
-		if (fair_rc == 1) sem_wait(&fair_db);//shared_mutex_db.lock(); //1.Reader => lock DB
+		if (fair_rc == 1) sem_wait(&fair_db); //1.Reader => lock DB
 		sem_post(&fair_mutex);
 
 		//Read from database
