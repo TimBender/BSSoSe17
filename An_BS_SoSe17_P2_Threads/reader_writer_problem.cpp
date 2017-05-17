@@ -21,13 +21,13 @@ int main(int argc, char** argv)
 
 	/*second test round: 1:1 ratio (r_threads:w_threads)*/
 
-	//vector<thread> r_thread = vector<thread>(NUM_OF_THREADS, thread(reader)); //reading function
-	//vector<thread> w_thread = vector<thread>(NUM_OF_THREADS, thread(writer)); //writing function
+	//vector<thread> r_threads = vector<thread>(NUM_OF_THREADS); //reading function
+	//vector<thread> w_threads = vector<thread>(NUM_OF_THREADS); //writing function
 
 	/*third test round: 1:9 ratio (r_threads:w_threads)*/
 
-	//vector<thread> r_thread = vector<thread>((NUM_OF_THREADS), thread(reader)); //reading function
-	//vector<thread> w_thread = vector<thread>((NUM_OF_THREADS* 9), thread(writer)); //writing function
+	//vector<thread> r_threads = vector<thread>((NUM_OF_THREADS)); //reading function
+	//vector<thread> w_threads = vector<thread>((NUM_OF_THREADS* 9)); //writing function
 
 
 	/*create all threads*/
