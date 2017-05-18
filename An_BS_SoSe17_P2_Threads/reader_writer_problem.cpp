@@ -92,11 +92,11 @@ int main(int argc, char** argv)
 
 	// wait for all threads to terminate
 	for (std::thread& r_thread : fairR_threads) {
-		fairR_thread.join();
+		r_thread.join();
 	}
 
 	for (std::thread& w_thread : fairW_threads) {
-		fairW_thread.join();
+		w_thread.join();
 	}
 
 	//Ausgabe der durchschnittlichen Daten
