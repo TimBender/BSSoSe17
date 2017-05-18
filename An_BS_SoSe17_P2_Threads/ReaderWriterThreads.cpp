@@ -3,7 +3,6 @@
 
 #include <pthread.h>
 #include <thread>			// for std::this_thread
-#include <semaphore.h>
 #include <stdio.h>
 #include <iostream>			// for std::cin, cerr, cout ...
 #include <chrono>			// for std::chrono... 
@@ -101,11 +100,6 @@ void reader(int readerID, int numSeconds) {
 /* FAIR TREATMENT: no thread starvation pursued, add FIFO scheduling
 =================================================================================*/
 
-/*semaphores for fair treatment*/
-sem_t fair_mutex;							//for fair_rc  
-sem_t fair_db;								//access control on database
-sem_t fifoQueue;							//preserves right order
-int fair_rc=0;								//reader counter
 
 // The writer thread
 void fairWriter(int writerID, int numSeconds)
@@ -125,7 +119,7 @@ void fairWriter(int writerID, int numSeconds)
 
 		bool result = theDatabase.write(writerID); //write to db
 
-		sem_post(&db); //release exclusive access to db
+		sem_post(&fair_db); //release exclusive access to db
 
 		++tests;
 
@@ -161,7 +155,7 @@ void fairReader(int readerID, int numSeconds) {
 	{
 		sem_wait(&fifoQueue);	//wait in line to be served
 		sem_wait(&fair_mutex);	//exklusiver Zugriff fuer reader counter/rc
-		rc++;
+		fair_rc++;
 		if (fair_rc == 1) sem_wait(&fair_db); //1.Reader => lock DB
 		sem_post(&fair_mutex);
 
@@ -170,7 +164,7 @@ void fairReader(int readerID, int numSeconds) {
 		++tests;
 
 		sem_wait(&fair_mutex); //exklusiver Zugriff auf reader counter
-		rc--;
+		fair_rc--;
 		if (fair_rc == 0) sem_post(&fair_db); //unlock DB, when last reader thread has finished
 		sem_post(&fair_mutex);
 
