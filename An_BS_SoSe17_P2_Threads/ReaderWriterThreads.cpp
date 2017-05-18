@@ -121,7 +121,7 @@ void fairWriter(int writerID, int numSeconds)
 	{
 		sem_wait(&fifoQueue);	//wait to be served
 		sem_wait(&fair_db);		//exclusive access to db
-		sem_post(&fifQueue);
+		sem_post(&fifoQueue);
 
 		bool result = theDatabase.write(writerID); //write to db
 
