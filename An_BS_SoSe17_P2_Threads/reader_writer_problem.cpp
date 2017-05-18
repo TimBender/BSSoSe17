@@ -14,6 +14,9 @@ int main(int argc, char** argv)
 	const size_t NUM_OF_THREADS = 2; //number of writing threads
 	const int MAX_TIME = 120;
 	
+	sem_init( &fair_mutex, 0, 1);	
+        sem_init( &fair_db,    0, 1 );	
+        sem_init( &fifoQueue,  0, 1 );
 	//int r_counter = 1, w_counter = 1, 
 
 	///* READER PREFERENCE
