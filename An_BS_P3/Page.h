@@ -1,17 +1,19 @@
 #pragma once
 
-#include<array>
+#include<vector>
 
 using namespace std;
 class Page
 {
 public:
-	friend class Prozess;
+	static size_t BLOCK_SIZE;
+	friend class Process;
 	Page(const size_t& id);
-	size_t getId()const{ return m_id; }
+	size_t getId()const { return m_id; }
+	vector<char> getBlock() const { return m_block; }
 	~Page();
 private:
-	array<char, 8> m_block;
+	vector<char> m_block;
 	size_t m_id;
 };
 

@@ -1,22 +1,34 @@
-#include"Prozess.h"
+#include"SimCPU.h"
 #include<iostream>
 #include<array>
+#include<list>
 #include<random>
+#include<set>
+#include<algorithm>
+
+
+void simulateCPU(Process& process,const int &cmd);
 
 using namespace std;
-void simulateCPU(const int &cmd);
 int main(int argc, char** argv)
 {
-	std::random_device rd;
-	std::mt19937 gen(rd());		//	Pseudozahlen Generator
+	set<Process> processes;		// stores all processes
+	SimCPU sim_CPU(processes);	//	simulated CPU
+	array<char, 1000> ram;		//	1 char = 1B
+	list<Page> hard_disk;		//	Festplatte: speichert min. alle - nicht eingelagerten - Seiten
+	
+
+	/*	Pseudozahlen Generator	*/
+	random_device rd;
+	mt19937 gen(rd());		
 
 	int randNum;
-	array<char, 1000> ram;		//	1 char = 1B
-	Prozess process;
+	
+	Process current_process;
 
 	/** am wahrscheinlichsten (desc):
-							0 = schreiben
-							1 = lesen
+							0 = lesen
+							1 = schreiben
 							2 = Prozesswechsel */
 
 	discrete_distribution<> stochastic_distribution({ 3, 2, 1 }); 
@@ -26,31 +38,13 @@ int main(int argc, char** argv)
 		randNum = stochastic_distribution(gen);
 
 		/*simulate CPU*/
-		simulateCPU(randNum);
-	}
-}
-
-void simulateCPU(const int &cmd)
-{
-	enum INSTRUCTION{
-		WRITE, READ, SWITCH_PROCESS
-	};
-
-	switch (INSTRUCTION(cmd))
-	{
-	case WRITE:
-		cout <<"write\n";
-		break;
-	case READ:
-		cout << "read\n";
-		break;
-	case SWITCH_PROCESS:
-		cout << "switch\n";
-		break;
-	default:
-		cerr << "- unknown CPU command -\n";
-		break;
+		sim_CPU.execute(current_process,randNum);
 	}
 
+	/*Ausgabe der Statistik*/
+	sim_CPU.printReport();
 
+
+	return 0;
 }
+
