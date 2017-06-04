@@ -37,12 +37,13 @@ int main(int argc, char** argv)
 
 	current_process = *processes.begin();
 	
-	/*	mit einer gewissen Wahrscheinlichkeit die letzte Adresse wiederverwenden (und sonst zu einer neuen, zufälliger Adresse springen)	*/
+
+	/*	ADRESSGENERATOR Funktionen:
+		1) adress_generator_rand: mit einer gewissen Wahrscheinlichkeit die letzte Adresse wiederverwenden (und sonst zu einer neuen, zufälliger Adresse springen
+		2) adress_generator_delta: Adress + 'Adressdelta'
+	=======================================================================	*/
 	adress_picker = adress_generator_rand(current_process, adress_picker);
 
-
-	
-	cout << adress_picker.to_string()<<'\t'<<newAdress.to_string() << '\n';
 
 	/*Pick a random adress at first*/
 	int randNum;
