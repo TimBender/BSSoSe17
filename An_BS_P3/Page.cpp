@@ -1,10 +1,11 @@
 #include "Page.h"
 
-size_t Page::BLOCK_SIZE = 8;
+size_t Page::PAGE_NUM_LENGTH = 4;
 
-Page::Page(const size_t& id)
-:m_id(id), m_block(vector<char>(BLOCK_SIZE))
+Page::Page(const bitset<32>& block )
+:m_block(block)
 {
+
 }
 
 
