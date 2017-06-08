@@ -10,6 +10,10 @@
 
 /* READER PREFERENCE
 =================================================================================*/
+int fair_rc = 0;
+sem_t fair_mutex;
+sem_t fair_db;								//access control on database
+sem_t fifoQueue;	
 
 /*semaphores for reader preference solution*/
 sem_t mutex;

@@ -25,4 +25,5 @@ void MMU::setCurrentPageChart(const multimap < Page, bool>& table)
 
 MMU::~MMU()
 {
+    
 }

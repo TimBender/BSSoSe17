@@ -30,7 +30,7 @@ void SimCPU::execute(Process& process, const int &cmd)
 		WRITING_COUNTER++;
 		break;
 
-	case SWITCH_PROCESS:	//	willkürlicher Prozesswechsel
+	case SWITCH_PROCESS:	//	willkï¿½rlicher Prozesswechsel
 		cout << "---\tPROCESS SWITCH\t---\n";
 		cout << "___________________________________\n\n";
 
@@ -39,20 +39,18 @@ void SimCPU::execute(Process& process, const int &cmd)
 		{
 			while (m_processes.find(Process(rand() % m_processes.size())), temp_process = *m_processes.find(Process(rand() % m_processes.size())), temp_process == process)
 			{
+                            
 			}
-
 			swap(process, temp_process);
 			PROCESS_SWITCH_COUNTER++;
 		}
+                
 		else cerr << ">>\tno process left to switch to\t<<\n\n";
 		break;
-
 	default:
 		cerr << ">> unknown CPU command <<\n";
 		break;
 	}
-
-
 }
 
 /*Statistiken fuer den Laborbericht*/

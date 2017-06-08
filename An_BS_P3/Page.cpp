@@ -11,4 +11,5 @@ Page::Page(const bitset<32>& block )
 
 Page::~Page()
 {
+    
 }
