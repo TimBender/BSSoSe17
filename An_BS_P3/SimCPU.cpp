@@ -1,10 +1,7 @@
 #include "SimCPU.h"
 
 size_t SimCPU::READING_COUNTER = 0, SimCPU::WRITING_COUNTER = 0, SimCPU::PROCESS_SWITCH_COUNTER = 0;
-SimCPU::SimCPU(set<Process>& processes)
-:m_processes(processes)
-{
-}
+
 
 /**	arbeitet stochastisch
 Befehlssatz= lesen	/	schreiben	/ Prozesswechsel	*/
@@ -34,18 +31,16 @@ void SimCPU::execute(Process& process, const int &cmd)
 		cout << "---\tPROCESS SWITCH\t---\n";
 		cout << "___________________________________\n\n";
 
-		/*	swap current process with random process in the container	*/
+		/*	swap current process with random process in the container	
 		if (!m_processes.empty())
 		{
-			while (m_processes.find(Process(rand() % m_processes.size())), temp_process = *m_processes.find(Process(rand() % m_processes.size())), temp_process == process)
-			{
-                            
-			}
-			swap(process, temp_process);
+
 			PROCESS_SWITCH_COUNTER++;
 		}
-                
+        
 		else cerr << ">>\tno process left to switch to\t<<\n\n";
+
+		*/
 		break;
 	default:
 		cerr << ">> unknown CPU command <<\n";
