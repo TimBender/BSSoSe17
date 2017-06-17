@@ -2,25 +2,32 @@
 #include"Page.h"
 #include<bitset>
 #include<array>
+#include<vector>
 
 using namespace std;
 class Process
 {
 public:
 	static size_t ID_COUNTER;
-	static size_t OFFSET;
+	static const size_t OFFSET_LENGTH;
+	static const size_t PAGENR_LENGTH;
+	static const size_t SIZE;
 	Process();
-	bitset<8> getPage() const{ return m_page; }
+	vector<Page> getVirtualMemory() const{ return m_virtual_memory; }
 	size_t getId() const { return m_id; }
 	int getModifiedBit(const int& pageNr)const;
 	int getPresentBit(const int& pageNr)const;
 	bitset<8> getPageFrame(const int& pageNr)const;
+	Page* find(const size_t & id);
 	~Process();
 private:
 	/**	information:
-	Page Frame		-	Present / Absent*/
-	array<array<unsigned char, 2>, 16> m_table;
-	bitset<8> m_page;
+	Modified Bit	-	Present / Absent	-	Page Frame	*/
+	vector<array<unsigned char, 3>> m_table;
+
+	/*	virtual memory	*/
+	vector<Page> m_virtual_memory;
+
 	size_t m_id;
 };
 

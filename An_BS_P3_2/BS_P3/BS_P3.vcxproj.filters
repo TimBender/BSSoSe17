@@ -18,7 +18,10 @@
     <ClInclude Include="Process.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Desktop\BSSoSe17\An_BS_P3\SimCPU.h">
+    <ClInclude Include="Page.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="SimulatedCPU.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
@@ -29,7 +32,10 @@
     <ClCompile Include="main.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Desktop\BSSoSe17\An_BS_P3\SimCPU.cpp">
+    <ClCompile Include="Page.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="SimulatedCPU.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>

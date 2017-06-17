@@ -1,18 +1,19 @@
-﻿Der Buildvorgang wurde am 15.06.2017 18:39:17 gestartet.
-     1>Projekt "c:\Users\ChauHung\documents\visual studio 2013\Projects\BS_P3\BS_P3\BS_P3.vcxproj" auf Knoten "2", Build Ziel(e).
+﻿Der Buildvorgang wurde am 17.06.2017 13:17:28 gestartet.
+     1>Projekt "C:\Users\ChauHung\Desktop\BSSoSe17\An_BS_P3_2\BS_P3\BS_P3.vcxproj" auf Knoten "2", Build Ziel(e).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Process.cpp
-         Process.cpp
-     1>c:\users\chauhung\documents\visual studio 2013\projects\bs_p3\bs_p3\process.cpp(22): warning C4018: '>=': Konflikt zwischen 'signed' und 'unsigned'
-     1>c:\users\chauhung\documents\visual studio 2013\projects\bs_p3\bs_p3\process.cpp(26): warning C4018: '>=': Konflikt zwischen 'signed' und 'unsigned'
-     1>c:\users\chauhung\documents\visual studio 2013\projects\bs_p3\bs_p3\process.cpp(30): warning C4018: '>=': Konflikt zwischen 'signed' und 'unsigned'
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt SimulatedCPU.cpp main.cpp
+         SimulatedCPU.cpp
+         Code wird generiert...
+         Überspringen... (keine relevanten Änderungen gefunden)
+         main.cpp
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"c:\users\chauhung\documents\visual studio 2013\Projects\BS_P3\Debug\BS_P3.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"c:\users\chauhung\documents\visual studio 2013\Projects\BS_P3\Debug\BS_P3.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"c:\users\chauhung\documents\visual studio 2013\Projects\BS_P3\Debug\BS_P3.lib" /MACHINE:X86 Debug\SimCPU.obj
-         Debug\main.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ChauHung\Desktop\BSSoSe17\An_BS_P3_2\Debug\BS_P3.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\ChauHung\Desktop\BSSoSe17\An_BS_P3_2\Debug\BS_P3.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ChauHung\Desktop\BSSoSe17\An_BS_P3_2\Debug\BS_P3.lib" /MACHINE:X86 Debug\main.obj
+         Debug\Page.obj
          Debug\Process.obj
-         BS_P3.vcxproj -> c:\users\chauhung\documents\visual studio 2013\Projects\BS_P3\Debug\BS_P3.exe
-     1>Die Erstellung des Projekts "c:\Users\ChauHung\documents\visual studio 2013\Projects\BS_P3\BS_P3\BS_P3.vcxproj" ist abgeschlossen, Build Ziel(e).
+         Debug\SimulatedCPU.obj
+         BS_P3.vcxproj -> C:\Users\ChauHung\Desktop\BSSoSe17\An_BS_P3_2\Debug\BS_P3.exe
+     1>Die Erstellung des Projekts "C:\Users\ChauHung\Desktop\BSSoSe17\An_BS_P3_2\BS_P3\BS_P3.vcxproj" ist abgeschlossen, Build Ziel(e).
 
 Build erfolgreich.
 
-Verstrichene Zeit 00:00:01.55
+Verstrichene Zeit 00:00:05.20

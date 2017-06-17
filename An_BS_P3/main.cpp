@@ -20,7 +20,7 @@ int main(int argc, char** argv)
 
 	set<Process> processes;		//	stores all processes
 	Process current_process;
-	SimCPU sim_CPU(processes);	//	simulated CPU
+
 
 	array<Page, 250> ram;						//	1KB= 250Pages: 1KB / 4B (Groesse einer Seite)
 	multimap< size_t , Page > hard_disk;		//	speichert min. alle - nicht eingelagerten - Seiten + ID des Prozesses fuer die Zuordnung
@@ -35,8 +35,8 @@ int main(int argc, char** argv)
 		processes.insert(Process());
 	}
 
-	current_process = *processes.begin();
 	
+	SimCPU sim_CPU(processes);	//	simulated CPU
 
 	/*	ADRESSGENERATOR Funktionen:
 		1) adress_generator_rand: mit einer gewissen Wahrscheinlichkeit die letzte Adresse wiederverwenden (und sonst zu einer neuen, zufälliger Adresse springen
@@ -62,7 +62,7 @@ int main(int argc, char** argv)
 		randNum = stochastic_distribution(gen);
 
 		/*simulate CPU*/
-		sim_CPU.execute(current_process,randNum);
+		sim_CPU.execute(randNum);
 	}
 
 	/*Ausgabe der Statistik*/

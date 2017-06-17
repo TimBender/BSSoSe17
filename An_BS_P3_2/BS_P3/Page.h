@@ -6,14 +6,14 @@ using namespace std;
 class Page
 {
 public:
+	friend class Process;
 	Page(){};
-	Page(const bitset<8> virtual_adress, const string& content);
-	bitset<8> getVirtualAdress() const{ return m_virtual_adress; }
+	Page(const bitset<6>& virtual_adress, const string& content);
+	bitset<6> getVirtualAdress() const{ return m_virtual_adress; }
 	string getContent()const{ return m_content; }
-	~Page();
-
+	~Page(){};
 private:
-	bitset<8> m_virtual_adress;
+	bitset<6> m_virtual_adress;
 	string m_content;
 };
 

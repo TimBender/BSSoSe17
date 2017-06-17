@@ -78,13 +78,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\Desktop\BSSoSe17\An_BS_P3\SimCPU.h" />
+    <ClInclude Include="Page.h" />
     <ClInclude Include="Process.h" />
+    <ClInclude Include="SimulatedCPU.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Desktop\BSSoSe17\An_BS_P3\SimCPU.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Page.cpp" />
     <ClCompile Include="Process.cpp" />
+    <ClCompile Include="SimulatedCPU.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
