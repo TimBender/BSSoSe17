@@ -9,7 +9,7 @@ const size_t Process::SIZE = pow(2,PAGENR_LENGTH);			// allocated storage= 2^PAG
 
 
 Process::Process()
-:m_id(ID_COUNTER++), m_virtual_memory(SIZE), m_table(vector<array<unsigned char, 3>>(SIZE))
+:m_id(ID_COUNTER++), m_virtual_memory(SIZE), m_table(vector<array<unsigned char, 4>>(SIZE))
 {
 	const unsigned char GARBAGE_PAGE_NR = 0x3;		//	default / garbage value for the page table = 11
 	const unsigned char OFFSET = 0x4;
@@ -28,7 +28,7 @@ Process::Process()
 	}
 
 	/*	create page table*/
-	array <unsigned char, 3> content = { 0 , 0, GARBAGE_PAGE_NR };	// adress: garbage;	modified: 0; absent/present=0;
+	array <unsigned char, 4> content = { 0, 0 , 0, GARBAGE_PAGE_NR };	// adress: garbage;	modified: 0; absent/present=0;
 	for (size_t i = 0; i < m_table.size(); i++){
 		m_table[i] = content;
 		//cout << std::bitset<8>(content[0]).to_string() << endl;

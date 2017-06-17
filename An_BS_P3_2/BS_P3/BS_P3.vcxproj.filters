@@ -24,6 +24,9 @@
     <ClInclude Include="SimulatedCPU.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="MMU.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Process.cpp">
@@ -36,6 +39,9 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="SimulatedCPU.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="MMU.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>

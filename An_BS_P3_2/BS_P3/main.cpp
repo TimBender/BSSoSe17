@@ -1,4 +1,5 @@
 #include"Process.h"
+#include"MMU.h"
 #include"SimulatedCPU.h"
 #include<vector>
 #include<random>
@@ -8,10 +9,11 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
+
 	srand(static_cast<unsigned int>(time(NULL)));
 
 	const size_t NUM_OF_PROCESS = 2;
-	array<unsigned char, 1000> RAM;		//	capacity: 1KB
+
 	vector<Process> processes;
 
 

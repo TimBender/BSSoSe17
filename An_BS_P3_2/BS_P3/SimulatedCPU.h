@@ -1,5 +1,6 @@
 #pragma once
 #include"Process.h"
+#include "MMU.h"
 #include<iostream>
 #include<vector>
 #include<algorithm>
@@ -20,7 +21,8 @@ public:
 private:
 	vector<Process> m_processes;
 	Process m_current_process;
-	unsigned m_current_adress;
+	unsigned m_current_adress = 0x04;
+	MMU mmu;
 };
 
 
