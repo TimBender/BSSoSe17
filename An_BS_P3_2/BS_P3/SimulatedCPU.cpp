@@ -5,9 +5,9 @@
 
 size_t SimulatedCPU::READING_COUNTER = 0, SimulatedCPU::WRITING_COUNTER = 0, SimulatedCPU::PROCESS_SWITCH_COUNTER = 0;
 
-SimulatedCPU::SimulatedCPU(vector<Process>& processes)
-:m_processes(processes)
+void  SimulatedCPU::setProcesses(vector<Process>& processes)
 {
+	m_processes = processes;
 	m_current_process = m_processes[rand() % m_processes.size()];	//	take rand process as current process
 	mmu.assignCurrentTable(m_current_process.getPageTable());		// assign current page table to MMU
 }
@@ -16,9 +16,6 @@ SimulatedCPU::SimulatedCPU(vector<Process>& processes)
 Befehlssatz= lesen	/	schreiben	/ Prozesswechsel	*/
 void SimulatedCPU::execute(const int &cmd)
 {
-	array<unsigned char, 1000> RAM;		//	capacity: 1KB
-	vector<Page> m_hard_disk;
-
 	enum INSTRUCTION{
 		READ, WRITE, SWITCH_PROCESS
 	};
@@ -28,17 +25,15 @@ void SimulatedCPU::execute(const int &cmd)
 	case READ:				// LOAD address
 		cout << "READING OPERATION\t";
 		adress_generator_delta(0x20);
-		cout <<"LOAD 0x" <<hex<< static_cast<int>(m_current_adress) << "\n\n";
+		cout << "LOAD 0x" << hex << static_cast<int>(m_current_adress) << "\n\n";
 		try{
-			mmu.convertToPhysicalAdress(m_current_adress);
-
+			readOrWriteToRAM(1, static_cast<int>(mmu.convertToPhysicalAdress(m_current_adress).to_ulong()));
 		}
 		catch (const exception& eo)
 		{
+			mmu.getOS().assign(m_current_adress, hard_disk, m_current_process, ram, m_current_process.getPageTable());
 			cerr << setw(15) << eo.what();
 		}
-
-		cout << hex << (int)m_current_adress << '\n';
 		cout << "______________________________________\n\n";
 		READING_COUNTER++;
 		break;
@@ -48,15 +43,13 @@ void SimulatedCPU::execute(const int &cmd)
 		adress_generator_delta(0x20);
 		cout << "STORE 0x" << hex << static_cast<int>(m_current_adress) << "\n\n";
 		try{
-			mmu.convertToPhysicalAdress(m_current_adress);
+			readOrWriteToRAM(0, static_cast<int>(mmu.convertToPhysicalAdress(m_current_adress).to_ulong()));
 
 		}
 		catch (const exception& eo)
 		{
 			cerr << eo.what();
 		}
-
-		cout << hex << (int)m_current_adress << '\n';
 		cout << "______________________________________\n\n";
 		WRITING_COUNTER++;
 		break;
@@ -75,7 +68,7 @@ void SimulatedCPU::execute(const int &cmd)
 			m_current_process = m_processes[rand_number];					// swap current process with a different random process
 			mmu.assignCurrentTable(m_current_process.getPageTable());		// assign current page table to MMU
 			cout << "switched to process " << m_current_process.getId() << '\n';
-	
+
 			PROCESS_SWITCH_COUNTER++;
 		}
 
@@ -99,6 +92,40 @@ void SimulatedCPU::printReport() const
 	cout << "\n";
 	cout << "% of reading operations: " << READING_COUNTER / sum_of_operations << "\n|% of writing operations: " << WRITING_COUNTER / sum_of_operations << "\n|number of process switches: " << PROCESS_SWITCH_COUNTER << '\n';
 }
+
+void  SimulatedCPU::readOrWriteToRAM(const bool& isReading, const int& index)
+{
+	enum INSTRUCTION{
+		WRITE, READ
+	};
+
+	/* check if page frame is assigned to external process	*/
+
+	if (static_cast<int>(ram[index]) != m_current_process.getId()){
+		cerr << "ERROR_ tried to from external process\n";
+		return;
+	}
+
+	switch (INSTRUCTION(isReading))
+	{
+	case WRITE:
+		// Write content of page frame block ( adress + offset ) 
+		for (size_t i = 0; i < Process::OFFSET_LENGTH; i++){
+			ram[index + i] = m_current_process.getId();
+		}
+		break;
+	case READ:
+		// Read content of page frame block ( adress + offset ) 
+		for (size_t i = 0; i < Process::OFFSET_LENGTH; i++){
+			cout << '[' << ram[index + i] << "]\n";
+		}
+		break;
+	default:
+		cerr << "Invalid operation\n";
+		break;
+	}
+}
+
 
 /*	pick another adress by adding or subtracting (by a certain probaility) the specified delta adress	*/
 void  SimulatedCPU::adress_generator_delta(const unsigned &delta_adress)

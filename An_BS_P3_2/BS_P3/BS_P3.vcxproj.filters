@@ -27,6 +27,9 @@
     <ClInclude Include="MMU.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="OS.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Process.cpp">
@@ -42,6 +45,9 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="MMU.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="OS.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>

@@ -79,6 +79,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="MMU.h" />
+    <ClInclude Include="OS.h" />
     <ClInclude Include="Page.h" />
     <ClInclude Include="Process.h" />
     <ClInclude Include="SimulatedCPU.h" />
@@ -86,6 +87,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MMU.cpp" />
+    <ClCompile Include="OS.cpp" />
     <ClCompile Include="Page.cpp" />
     <ClCompile Include="Process.cpp" />
     <ClCompile Include="SimulatedCPU.cpp" />

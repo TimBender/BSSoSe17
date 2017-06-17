@@ -11,7 +11,7 @@ void MMU::assignCurrentTable(vector<array<unsigned char, 4>>& current_table)
 	m_page_table = current_table;
 }
 
-bitset<6> MMU::convertToPhysicalAdress(const bitset<6>& adress)
+bitset<2> MMU::convertToPhysicalAdress(const bitset<6>& adress)
 {
 	int present_bit;
 	/*	extract Index/Page Number from virtual adress	*/
@@ -25,13 +25,8 @@ bitset<6> MMU::convertToPhysicalAdress(const bitset<6>& adress)
 	if (present_bit == 1) return  m_page_table[static_cast<int>(index.to_ulong())][m_page_table[0].size() - 1];
 
 	else{					// fail: Page Error -> call OS
-		//	++ SEITEN_FEHLER;
-		// RUFE BS AUF
-
 		throw exception(">> PAGE ERROR <<\n");
 	}
-
-	cout << adress[adress.size() - 1] << '\t' << adress[adress.size() - 2] << endl;
 }
 
 MMU::~MMU()
