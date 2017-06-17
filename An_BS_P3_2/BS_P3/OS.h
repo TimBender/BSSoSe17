@@ -14,8 +14,9 @@ public:
 	static size_t PAGE_ERROR_COUNTER;
 	
 	void transferAdress(const bitset<6>& adress);
-	void assign(bitset<6> adress, vector<Page>& hard_disk, Process& current_process, array<unsigned char, 1000>& ram, vector<array<unsigned char, 4>>& table);		// assign page to page frame/ physical memory
+	void assign(bitset<6> adress, vector<Page>& hard_disk, Process* current_process, vector<unsigned char>& ram, vector<array<unsigned char, 4>>& table);		// assign page to page frame/ physical memory
 	void substitute(vector<Page>& hard_disk);	// make room for page (page substitute algo)
+	bool findEmptyMemoryspace(Process* current_process, bitset<6> adress, vector<unsigned char>& ram);
 	// 2 Funktionen: NRU + FIFO
 	~OS();
 private:

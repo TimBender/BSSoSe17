@@ -19,7 +19,7 @@ public:
 	int getPresentBit(const int& pageNr)const;
 	bitset<8> getPageFrame(const int& pageNr)const;
 	vector<array<unsigned char, 4>>& getPageTable(){ return m_table; }
-	Page* find(const size_t & id);
+	Page find(const bitset<6>& adress);
 	~Process();
 private:
 	/**	information:

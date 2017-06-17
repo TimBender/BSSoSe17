@@ -1,8 +1,8 @@
-﻿Der Buildvorgang wurde am 17.06.2017 17:19:22 gestartet.
+﻿Der Buildvorgang wurde am 17.06.2017 20:51:49 gestartet.
      1>Projekt "C:\Users\ChauHung\Desktop\BSSoSe17\An_BS_P3_2\BS_P3\BS_P3.vcxproj" auf Knoten "2", Build Ziel(e).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt SimulatedCPU.cpp
-         SimulatedCPU.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt MMU.cpp
+         MMU.cpp
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\ChauHung\Desktop\BSSoSe17\An_BS_P3_2\Debug\BS_P3.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\ChauHung\Desktop\BSSoSe17\An_BS_P3_2\Debug\BS_P3.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\ChauHung\Desktop\BSSoSe17\An_BS_P3_2\Debug\BS_P3.lib" /MACHINE:X86 Debug\main.obj
          Debug\MMU.obj
@@ -10,10 +10,9 @@
          Debug\Page.obj
          Debug\Process.obj
          Debug\SimulatedCPU.obj
-     1>Page.obj : warning LNK4099: PDB "vc120.pdb" wurde nicht mit "Page.obj" oder an "C:\Users\ChauHung\Desktop\BSSoSe17\An_BS_P3_2\Debug\vc120.pdb" gefunden; Objekt wird verkn³pft, als ob keine Debuginformationen vorhanden wõren.
          BS_P3.vcxproj -> C:\Users\ChauHung\Desktop\BSSoSe17\An_BS_P3_2\Debug\BS_P3.exe
      1>Die Erstellung des Projekts "C:\Users\ChauHung\Desktop\BSSoSe17\An_BS_P3_2\BS_P3\BS_P3.vcxproj" ist abgeschlossen, Build Ziel(e).
 
 Build erfolgreich.
 
-Verstrichene Zeit 00:00:04.00
+Verstrichene Zeit 00:00:04.25

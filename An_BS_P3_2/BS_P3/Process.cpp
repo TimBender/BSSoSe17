@@ -21,7 +21,7 @@ Process::Process()
 	for (size_t i = 0; i < m_virtual_memory.size(); i++)
 	{
 		bitset<6> block(start_adress + OFFSET); // die 2 vorderen Bits werden gecuttet -> 8b- 2b
-		m_virtual_memory[i] = Page(block, to_string(m_id));
+		m_virtual_memory[i] = Page(block, m_id);
 		
 		start_adress += NEXT_ADRESS;
 		// cout << m_virtual_memory[i].getVirtualAdress().to_string()<<'\t'<< m_virtual_memory[i].getContent() << '\n';
@@ -51,9 +51,11 @@ bitset<8> Process::getPageFrame(const int& pageNr)const{
 }
 
 /*	detect if page is assigned to this process	*/
-Page* Process::find(const size_t & id){
-	if (id == m_id) return &m_virtual_memory[id];
-	else return NULL;
+Page Process::find(const bitset<6>& adress){
+	for (Page& page : m_virtual_memory){
+		if (page.getVirtualAdress() == adress) return page;
+	}
+	throw exception("");
 }
 
 Process::~Process()
