@@ -27,14 +27,18 @@ void SimulatedCPU::adress_generator_rand_probabilty(const bool& preferCurrentAdr
 		CURRENT_ADRESS, NEW_ADRESS
 	};
 
+	const unsigned MAX_ADRESS = 0x34;
+	const unsigned MIN_ADRESS = 0x04;
+
 	/*	Pseudozahlen Generator	*/
 	random_device rd;
 	mt19937 gen(rd());
 	double prob_current = 0, prob_new = 0;
 
 
-	(preferCurrentAdress ? prob_current = 2, prob_new = 1 : prob_current = 1, prob_new = 2);
+	(preferCurrentAdress ? prob_current = 0.65 : prob_current = 0.45);
 
+	prob_new = 1.0 - prob_current;
 	discrete_distribution<> stochastic_distribution({ prob_current, prob_new });
 
 	switch (ADRESS(stochastic_distribution(gen)))
@@ -42,9 +46,14 @@ void SimulatedCPU::adress_generator_rand_probabilty(const bool& preferCurrentAdr
 	case CURRENT_ADRESS:
 		break;
 	case NEW_ADRESS:
-		m_current_adress = '0x' + (rand() % 34 + 4);
-		cout << hex << (int)m_current_adress << '\n';
-		break;
+	{
+					   unsigned temp_adress;
+					   while (temp_adress = (rand() % 34 + 4), static_cast<int>(temp_adress) == static_cast<int>(m_current_adress)){}
+					   m_current_adress = temp_adress;
+					   if (m_current_adress < MIN_ADRESS) m_current_adress = MIN_ADRESS;
+					   if (m_current_adress> MAX_ADRESS) m_current_adress = MAX_ADRESS;
+					   break;
+	}
 	default:
 		cerr << "ERROR_please try again.\n";
 		break;
@@ -75,15 +84,20 @@ void SimulatedCPU::execute(const int &cmd)
 	{
 	case READ:				// LOAD address
 		cout << "READING OPERATION\t";
-		adress_generator_delta(0x20);
+		//adress_generator_delta(0x20);
+		adress_generator_rand_probabilty(true); // current adress preferred
 		cout << "LOAD 0x" << hex << static_cast<int>(m_current_adress) << "\n\n";
 		try{
-			readOrWriteToRAM(1, static_cast<int>(mmu.convertToPhysicalAdress(m_current_adress).to_ulong()));
+			readOrWriteToRAM(1, static_cast<int>(mmu.convertToPhysicalAdress(m_current_process, m_current_adress).to_ulong()));
+		}
+		catch (const invalid_argument& eo)
+		{
+			cout << eo.what() << '\n';
+			return;
 		}
 		catch (const exception& eo)
 		{
 			fixPageError();
-			cerr << setw(15) << eo.what();
 		}
 		cout << "______________________________________\n\n";
 		READING_COUNTER++;
@@ -91,15 +105,20 @@ void SimulatedCPU::execute(const int &cmd)
 
 	case WRITE:				// STORE address
 		cout << "WRITING OPERATION\t";
-		adress_generator_delta(0x20);
+		//adress_generator_delta(0x20);
+		adress_generator_rand_probabilty(true); // current adress preferred
 		cout << "STORE 0x" << hex << static_cast<int>(m_current_adress) << "\n\n";
 		try{
-			readOrWriteToRAM(0, static_cast<int>(mmu.convertToPhysicalAdress(m_current_adress).to_ulong()));
+			readOrWriteToRAM(0, static_cast<int>(mmu.convertToPhysicalAdress(m_current_process, m_current_adress).to_ulong()));
+		}
+		catch (const invalid_argument& eo)
+		{
+			cout << eo.what() << '\n';
+			return;
 		}
 		catch (const exception& eo)
 		{
 			fixPageError();
-			cerr << eo.what();
 		}
 		cout << "______________________________________\n\n";
 		WRITING_COUNTER++;
@@ -177,14 +196,12 @@ void  SimulatedCPU::readOrWriteToRAM(const bool& isReading, const int& index)
 /*Statistiken fuer den Laborbericht*/
 void SimulatedCPU::printReport() const
 {
-
-	const unsigned int sum_of_operations = WRITING_COUNTER + READING_COUNTER + PROCESS_SWITCH_COUNTER;
-	cout << "______________________________________\n";
+	cout <<dec<< "______________________________________\n";
 	cout << "______________________________________\n\n";
 	cout << "REPORT\n\n";
 	cout << "PAGE ERRORS IN TOTAL:\t"<< OS::PAGE_ERROR_COUNTER;
 	cout << "\n";
-	cout << dec<<"% of reading operations: " << READING_COUNTER / sum_of_operations << "\n|% of writing operations: " << WRITING_COUNTER / sum_of_operations << "\n|number of process switches: " << PROCESS_SWITCH_COUNTER << '\n';
+	cout << dec<<"% of reading operations: " << READING_COUNTER<< "\n|% of writing operations: " << WRITING_COUNTER << "\n|number of process switches: " << PROCESS_SWITCH_COUNTER << '\n';
 }
 
 SimulatedCPU::~SimulatedCPU()

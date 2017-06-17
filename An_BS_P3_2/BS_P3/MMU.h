@@ -11,7 +11,7 @@ public:
 	MMU();
 	OS& getOS(){ return os; }
 	void assignCurrentTable(vector<array<unsigned char, 4>>& current_table);
-	bitset<2> convertToPhysicalAdress(const bitset<6>& adress);
+	bitset<2> convertToPhysicalAdress(Process* current_process, const bitset<6>& adress);
 	~MMU();
 private:
 	OS& os= OS::getInstance();

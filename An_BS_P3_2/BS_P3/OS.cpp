@@ -6,15 +6,17 @@ size_t OS::PAGE_ERROR_COUNTER = 0;
 
 void OS::assign(bitset<6> adress, vector<Page>& hard_disk, Process* current_process, vector<unsigned char>& ram, vector<array<unsigned char, 4>>& table)
 {
-	PAGE_ERROR_COUNTER++;	// increment: page error occured
+
 	for (size_t i = 0; i < hard_disk.size(); i++){
 		if (adress.to_ulong() == hard_disk[i].getVirtualAdress().to_ulong() && static_cast<int>(hard_disk[i].getContent()) == static_cast<int>(current_process->getId())){
 			findEmptyMemoryspace(current_process, adress, ram);
 		
+			PAGE_ERROR_COUNTER++;	// increment: page error occured
 			/*	search for an empty spot in ram	*/
 			return;
 		}
 	}
+
 	cerr << "ERROR_ page not found.\n";
 }
 

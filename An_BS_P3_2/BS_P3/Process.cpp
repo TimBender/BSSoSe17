@@ -53,7 +53,7 @@ bitset<8> Process::getPageFrame(const int& pageNr)const{
 /*	detect if page is assigned to this process	*/
 Page Process::find(const bitset<6>& adress){
 	for (Page& page : m_virtual_memory){
-		if (page.getVirtualAdress() == adress) return page;
+		if (page.getVirtualAdress().to_string() == adress.to_string()) return page;
 	}
 	throw exception("");
 }
