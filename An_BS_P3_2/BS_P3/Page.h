@@ -8,9 +8,9 @@ class Page
 public:
 	friend class Process;
 	Page(){};
-	Page(const bitset<6>& virtual_adress, const unsigned char& content);
+	Page(const bitset<6>& virtual_adress, const size_t& content);
 	bitset<6> getVirtualAdress() const{ return m_virtual_adress; }
-	unsigned char getContent()const{ return m_content; }
+	size_t getContent()const{ return m_content; }
 	~Page(){};
 private:
 	bitset<6> m_virtual_adress;

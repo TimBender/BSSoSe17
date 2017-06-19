@@ -163,13 +163,13 @@ void SimulatedCPU::fixPageError()
 	
 }
 
-void  SimulatedCPU::readOrWriteToRAM(const bool& isReading, const int& index)
+void  SimulatedCPU::readOrWriteToRAM(const bool& isReading, const size_t& index)
 {
 
 	/* check if page frame is assigned to external process	*/
-	if (static_cast<int>(ram[index]) != m_current_process->getId()){
-		cout << "INDEX1:" << dec << static_cast<int>(ram[index]) << '\n';
-		cout << "INDEX2:" << m_current_process->getId()  << '\n';
+	if (static_cast<size_t>(ram[index]) != m_current_process->getId()){
+		cout << "INDEX1:" << dec << static_cast<size_t>(ram[index]) << '\n';
+		cout << "INDEX2:" << dec << m_current_process->getId() << '\n';
 		cerr << "ERROR_ attempted to read or write from external process. \n";
 		return;
 	}

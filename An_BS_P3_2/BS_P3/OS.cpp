@@ -11,7 +11,7 @@ void OS::assign(const bitset<6>& adress, vector<Page>& hard_disk, Process* curre
 	int num = 0;
 	bool hasFreeRAM= 1;
 	for (size_t i = 0; i < hard_disk.size(); i++){
-		if (adress.to_ulong() == hard_disk[i].getVirtualAdress().to_ulong() && static_cast<int>(hard_disk[i].getContent()) == current_process->getId()){
+		if (adress.to_ulong() == hard_disk[i].getVirtualAdress().to_ulong() &&hard_disk[i].getContent() == current_process->getId()){
 			hasFreeRAM = findEmptyMemoryspace(current_process, adress, ram);
 			if (!hasFreeRAM)	throw exception("RAM IS FULL - TIME TO MAKE ROOM!\n");
 			else{
@@ -24,12 +24,13 @@ void OS::assign(const bitset<6>& adress, vector<Page>& hard_disk, Process* curre
 		}
 		num = i;
 	}
+
 cerr << "ERROR_ page not found.\n";
 }
 
 bool OS::findEmptyMemoryspace(Process* current_process, const bitset<6>& adress, vector<unsigned char>& ram)
 {
-	unsigned physical_idx = 0;
+	size_t physical_idx = 0;
 	for (size_t i = 0; i < ram.size(); i++){
 		if (ram[i] == NULL){
 			cout << "assigned page " << adress.to_string() << " to physical memory\n\n";
@@ -42,7 +43,8 @@ bool OS::findEmptyMemoryspace(Process* current_process, const bitset<6>& adress,
 			bitset<2>idx = adress[current_process->find(adress).getVirtualAdress().size() - 2] + (2 * static_cast<int>(adress[current_process->find(adress).getVirtualAdress().size() - 1]));
 
 			current_process->getPageTable()[idx.to_ulong()][2] = 0x1;
-			current_process->getPageTable()[idx.to_ulong()][3] = (int)physical_idx;	//	insert page frame index to page table
+			current_process->getPageTable()[idx.to_ulong()][3] = physical_idx;	//	insert page frame index to page table
+			cout << "PHYSICAL: " << physical_idx << endl;
 			cout << "\ncurrent page table is updated accordingly.\n";
 			return true;
 		}

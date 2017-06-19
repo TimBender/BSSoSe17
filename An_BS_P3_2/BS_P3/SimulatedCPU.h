@@ -17,7 +17,7 @@ public:
 	void printReport() const;
 	void adress_generator_rand_probabilty(const bool& preferCurrentAdress);	// keep current adress with certain probability
 	void adress_generator_delta(const unsigned &delta_adress);					// generate adress by +- a delta adress
-	void readOrWriteToRAM(const bool& isReading, const int& index);
+	void readOrWriteToRAM(const bool& isReading, const size_t& index);
 	void fixPageError();
 	~SimulatedCPU(){};
 private:
