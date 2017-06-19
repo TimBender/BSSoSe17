@@ -31,8 +31,7 @@ int main(int argc, char** argv)
 		processes.push_back(Process());
 	}
 
-	SimulatedCPU& sim_cpu= SimulatedCPU::getInstance();	//	CPU
-	sim_cpu.setProcesses(processes);
+	SimulatedCPU sim_cpu(processes);
 
 	/**	CPU picks a command	
 	===========================================	
