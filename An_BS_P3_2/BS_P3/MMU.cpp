@@ -1,7 +1,7 @@
 #include "MMU.h"
 
 
-void MMU::assignCurrentTable(vector<array<unsigned char, 4>>& current_table)
+void MMU::assignCurrentTable(vector<array<size_t, 4>>& current_table)
 {
 	m_page_table = current_table;
 }

@@ -12,7 +12,7 @@ int main(int argc, char** argv)
 
 	srand(static_cast<unsigned int>(time(NULL)));
 
-	const size_t NUM_OF_PROCESS = 4;
+	const size_t NUM_OF_PROCESS = 460;
 
 	vector<Process> processes;
 
@@ -41,7 +41,7 @@ int main(int argc, char** argv)
 	2 = process switch */
 
 	discrete_distribution<> stochastic_distribution({ 3, 2, 1 });
-	for (size_t i = 0; i < 100; i++)
+	for (size_t i = 0; i < 10000; i++)
 	{
 		rand_command = stochastic_distribution(gen);
 		sim_cpu.execute(rand_command);		// default: execute first process;

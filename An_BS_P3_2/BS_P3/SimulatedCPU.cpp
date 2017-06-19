@@ -66,7 +66,7 @@ SimulatedCPU::SimulatedCPU(vector<Process>& processes)
 	m_processes = processes;
 	m_current_process = &m_processes[rand() % m_processes.size()];	//	take rand process as current process
 	mmu.assignCurrentTable(m_current_process->getPageTable());		// assign current page table to MMU
-	for (Page page : m_current_process->getVirtualMemory())
+	for (Page& page : m_current_process->getVirtualMemory())
 	{
 		hard_disk.push_back(page);
 	}
@@ -113,7 +113,7 @@ void SimulatedCPU::execute(const int &cmd)
 			{
 				hard_disk.push_back(page);
 			}
-			cout << "switched to process " << m_current_process->getId() << '\n';
+			cout << "switched to process " << dec << m_current_process->getId() << '\n';
 
 			PROCESS_SWITCH_COUNTER++;
 		}
@@ -152,8 +152,15 @@ void SimulatedCPU::execute(const int &cmd)
 
 void SimulatedCPU::fixPageError()
 {
-	mmu.getOS().assign(m_current_adress, hard_disk, m_current_process, ram, m_current_process->getPageTable());
-	mmu.assignCurrentTable(m_current_process->getPageTable());
+	try{
+		mmu.getOS().assign(m_current_adress, hard_disk, m_current_process, ram, m_current_process->getPageTable());
+		mmu.assignCurrentTable(m_current_process->getPageTable());
+	}
+	catch (const exception& eo){
+		cerr << eo.what() << '\n';
+		exit(1);
+	}
+	
 }
 
 void  SimulatedCPU::readOrWriteToRAM(const bool& isReading, const int& index)
@@ -161,7 +168,7 @@ void  SimulatedCPU::readOrWriteToRAM(const bool& isReading, const int& index)
 
 	/* check if page frame is assigned to external process	*/
 	if (static_cast<int>(ram[index]) != m_current_process->getId()){
-		cout << "INDEX1:" << static_cast<int>(ram[index]) << '\n';
+		cout << "INDEX1:" << dec << static_cast<int>(ram[index]) << '\n';
 		cout << "INDEX2:" << m_current_process->getId()  << '\n';
 		cerr << "ERROR_ attempted to read or write from external process. \n";
 		return;
@@ -171,7 +178,7 @@ void  SimulatedCPU::readOrWriteToRAM(const bool& isReading, const int& index)
 	case READ:
 		// Read content of page frame block ( adress + offset ) 
 		for (size_t i = 0; i < Process::OFFSET_LENGTH; i++) {
-			cout << '[' << static_cast<int>(ram[index + i]) << "]\n";
+			cout << dec<<'[' << static_cast<int>(ram[index + i]) << "]\n";
 		}
 		break;
 

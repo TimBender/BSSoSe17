@@ -14,6 +14,6 @@ public:
 	~Page(){};
 private:
 	bitset<6> m_virtual_adress;
-	unsigned char m_content;
+	size_t m_content;
 };
 
