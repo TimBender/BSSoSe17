@@ -28,7 +28,7 @@ private:
 	vector<Process> m_processes;
 	Process *m_current_process;
 	unsigned m_current_adress = 0x04;
-
+        OS& os= OS::getInstance();
 	/*	components*/
 	MMU mmu;
 	vector<unsigned char> ram;		//	capacity: 1KB

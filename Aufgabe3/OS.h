@@ -21,14 +21,19 @@ public:
 	void substitute(vector<Page>& hard_disk);	// make room for page (page substitute algo)
 	bool findEmptyMemoryspace(Process* current_process,const bitset<6>& adress, vector<unsigned char>& ram);
 	void addToRAM(Process* current_process, const bitset<6>& adress,vector<unsigned char>& ram, const size_t& index);
+        void addToRAM( vector<unsigned char>& ram);
 	// 2 Funktionen: NRU + FIFO
-	void substitutePageByFIFO();
+        bool substitutePageByFIFO (const int& idx, vector<array<size_t,4>>& table, vector<array<size_t, 4>>& current_table ,vector<unsigned char>& ram);
+      
 	~OS(){};
 private:
+        void modifyPageTable();
 	list<Page> m_fifo_queue;	// FIFO tracken fuer den Seitenersetzungsalgo
+        Page m_oldest_page;
 	OS(){};
 	OS(const OS &obj);
 	OS &operator=(const OS &obj);
-	bitset<6> m_current_adress;
+	size_t m_oldest_idx; //Aeltester Seitenrahmen-Index
+        Page m_assignable_page;
 };
 

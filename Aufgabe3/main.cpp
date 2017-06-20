@@ -41,15 +41,15 @@ int main(int argc, char** argv)
 	2 = process switch */
 
 	discrete_distribution<> stochastic_distribution({ 3, 2, 1 });
-	for (size_t i = 0; i < 1400; i++)
-	{
+	for (size_t i = 0; i < 1600; i++)
+	{       
 		rand_command = stochastic_distribution(gen);
 		sim_cpu.execute(rand_command);		// default: execute first process;
 	}
-
-        cout<<"Hallu\n";
+      
 	/*	print statistics	*/
 	sim_cpu.printReport();
 
 	return 0;
 }
+

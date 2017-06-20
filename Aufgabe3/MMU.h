@@ -10,7 +10,6 @@ class MMU
 {
 public:
 	MMU(){};
-	OS& getOS(){ return os; }
 	void assignCurrentTable(vector<array<size_t, 4>>& current_table);
 	size_t convertToPhysicalAdress(Process* current_process, const bitset<6>& adress);
 	~MMU(){};
