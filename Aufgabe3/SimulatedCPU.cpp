@@ -5,6 +5,13 @@
 
 size_t SimulatedCPU::READING_COUNTER = 0, SimulatedCPU::WRITING_COUNTER = 0, SimulatedCPU::PROCESS_SWITCH_COUNTER = 0;
 
+void stepHandler(int i) {	
+		
+        alarm(2);
+	std::cout << "Handler wurde aufgerufen" << std::endl;
+  
+}
+
 /*	pick another adress by adding or subtracting (by a certain probaility) the specified delta adress	*/
 void SimulatedCPU::adress_generator_delta(const unsigned &delta_adress) {
     const unsigned MAX_ADRESS = 0x34;
@@ -66,6 +73,7 @@ SimulatedCPU::SimulatedCPU(vector<Process>& processes)
         hard_disk.push_back(page);
     }
     cout << "PROCESS " << m_current_process->getId() << endl << endl;
+    signal(SIGALRM, stepHandler);
 }
 
 /**	arbeitet stochastisch
@@ -140,6 +148,9 @@ void SimulatedCPU::fixPageError() {
         os.assign(m_current_adress, hard_disk, m_current_process, ram, m_current_process->getPageTable());
         mmu.assignCurrentTable(m_current_process->getPageTable());
     } catch (const exception& eo) {
+        alarm(1);
+        cout<<"FUNCTION CALLED\n";
+        exit(1);
         cerr << "RAM is full - time to make room!" << '\n';
         for (Process& proc : m_processes) {
             for (Page & page : proc.getVirtualMemory()) {

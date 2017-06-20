@@ -4,12 +4,17 @@
 #include<iostream>
 #include<vector>
 #include<algorithm>
+#include <signal.h>
+#include <stdio.h>
+#include <wait.h>
+#include <unistd.h>
 
 using namespace std;
 class SimulatedCPU
 {
 public:
 	friend class OS;
+        friend void stepHandler(int i);
 	static size_t READING_COUNTER, WRITING_COUNTER, PROCESS_SWITCH_COUNTER;
 	SimulatedCPU(){};
 	SimulatedCPU(vector<Process>& processes);
@@ -19,6 +24,7 @@ public:
 	void adress_generator_delta(const unsigned &delta_adress);					// generate adress by +- a delta adress
 	void readOrWriteToRAM(const bool& isReading, const size_t& index);
 	void fixPageError();
+        
 	~SimulatedCPU(){};
 private:
 	enum INSTRUCTION{
@@ -36,4 +42,4 @@ private:
 };
 
 
-
+//void stepHandler();
