@@ -1,5 +1,6 @@
 #pragma once
-#include"OS.h"
+#include"Process.h"
+
 #include<vector>
 #include<array>
 #include<bitset>
@@ -14,7 +15,6 @@ public:
 	size_t convertToPhysicalAdress(Process* current_process, const bitset<6>& adress);
 	~MMU(){};
 private:
-	OS& os= OS::getInstance();
 	vector<array<size_t, 4>> m_page_table;
 };
 

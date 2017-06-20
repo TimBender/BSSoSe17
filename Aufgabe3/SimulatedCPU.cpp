@@ -1,15 +1,26 @@
-﻿#include "SimulatedCPU.h"
+﻿#include "SimulatedCPU.h"      
 #include <random>
 #include <stdexcept>
-#include<iomanip>
+#include <iomanip>
 
 size_t SimulatedCPU::READING_COUNTER = 0, SimulatedCPU::WRITING_COUNTER = 0, SimulatedCPU::PROCESS_SWITCH_COUNTER = 0;
 
-void stepHandler(int i) {	
-		
-        alarm(2);
-	std::cout << "Handler wurde aufgerufen" << std::endl;
-  
+void handler(int index) {
+    alarm(2);
+    std::cout << "Handler wurde aufgerufen" << std::endl;
+}
+
+SimulatedCPU::SimulatedCPU(vector<Process>& processes)
+: ram(vector<unsigned char>(1000, 0)) {
+    m_processes = processes;
+    m_current_process = &m_processes[rand() % m_processes.size()]; //	take rand process as current process
+    mmu.assignCurrentTable(m_current_process->getPageTable()); // assign current page table to MMU
+
+    for (Page& page : m_current_process->getVirtualMemory()) {
+        hard_disk.push_back(page);
+    }
+    std::cout << "PROCESS " << m_current_process->getId() << std::endl << std::endl;
+    signal(SIGALRM, handler);
 }
 
 /*	pick another adress by adding or subtracting (by a certain probaility) the specified delta adress	*/
@@ -17,7 +28,7 @@ void SimulatedCPU::adress_generator_delta(const unsigned &delta_adress) {
     const unsigned MAX_ADRESS = 0x34;
     const unsigned MIN_ADRESS = 0x04;
 
-    int rand_num = rand() % 10 + 1;
+    int rand_num = static_cast<int> (rand() % 10 + 1);
     if (rand_num % 2 == 0)m_current_adress += delta_adress;
     else m_current_adress -= delta_adress;
 
@@ -59,44 +70,43 @@ void SimulatedCPU::adress_generator_rand_probabilty(const bool& preferCurrentAdr
             break;
         }
         default:
-            cerr << "ERROR_please try again.\n";
+            std::cerr << "ERROR_please try again.\n";
             break;
     }
-}
-
-SimulatedCPU::SimulatedCPU(vector<Process>& processes)
-: ram(vector<unsigned char>(1000, NULL)) {
-    m_processes = processes;
-    m_current_process = &m_processes[rand() % m_processes.size()]; //	take rand process as current process
-    mmu.assignCurrentTable(m_current_process->getPageTable()); // assign current page table to MMU
-    for (Page& page : m_current_process->getVirtualMemory()) {
-        hard_disk.push_back(page);
-    }
-    cout << "PROCESS " << m_current_process->getId() << endl << endl;
-    signal(SIGALRM, stepHandler);
 }
 
 /**	arbeitet stochastisch
 Befehlssatz= lesen	/	schreiben	/ Prozesswechsel	*/
 void SimulatedCPU::execute(const int &cmd) {
     /*	choose an adress generator	*/
+    // NRU
+    if (OS::TIMEOUT_TRACKER % OS::TIMEOUT_QUANTUM == 0) { // trigger time out every quantum unit
+        std::cout << "TIME OUT - reset all reference bits to 0" << std::endl;
+        /*  OS resets reference bit of ALL PAGES to 0 */
+        for (Process& proc : m_processes) {
+            os.resetRefBit(proc);
+        }
+    }
+    OS::TIMEOUT_TRACKER++; // increment timeout tracker to calc next timeout for NRU 
 
-    cout << "\n______________________________________\n\n";
-    switch (INSTRUCTION(cmd)) {
-        case READ: // LOAD address
-            cout << "READING OPERATION\t";
+    std::cout << "\n______________________________________\n\n";
+    switch (SimulatedCPU::INSTRUCTION(cmd)) {
+        case SimulatedCPU::READ: // LOAD address
+            std::cout << "READING OPERATION\t";
 
-            READING_COUNTER++;
+            /*  set modified + referenced bit to 1   */
+            SimulatedCPU::READING_COUNTER++;
             break;
 
-        case WRITE: // STORE address
-            cout << "WRITING OPERATION\t";
+        case SimulatedCPU::WRITE: // STORE address
+            std::cout << "WRITING OPERATION\t";
 
-            WRITING_COUNTER++;
+            /*  set referenced bit to 1   */
+            SimulatedCPU::WRITING_COUNTER++;
             break;
 
-        case SWITCH_PROCESS: //	random process switch
-            cout << "PROCESS SWITCH\t";
+        case SimulatedCPU::SWITCH_PROCESS: //	random process switch
+            std::cout << "PROCESS SWITCH\t";
 
             /*	swap current process with random process in the container */
 
@@ -113,7 +123,7 @@ void SimulatedCPU::execute(const int &cmd) {
                 {
                     hard_disk.push_back(page);
                 }
-                cout << "switched to process " << dec << m_current_process->getId() << '\n';
+                std::cout << "switched to process " << dec << m_current_process->getId() << '\n';
 
                 PROCESS_SWITCH_COUNTER++;
             } else cerr << ">>\tno process left to switch to\t<<\n\n";
@@ -125,10 +135,10 @@ void SimulatedCPU::execute(const int &cmd) {
     }
 
     /*	read/write [adress]	*/
-
-    if (INSTRUCTION(cmd) == READ || INSTRUCTION(cmd) == WRITE) {
+    if (SimulatedCPU::INSTRUCTION(cmd) == READ || SimulatedCPU::INSTRUCTION(cmd) == WRITE) {
+        /*  choose one adress generator for testing purposes    */
         adress_generator_delta(0x20);
-        //adress_generator_rand_probabilty(true); // current adress preferred
+        // adress_generator_rand_probabilty(true); // current adress preferred
 
         cout << "LOAD 0x" << hex << static_cast<int> (m_current_adress) << "\n\n";
         try {
@@ -144,27 +154,38 @@ void SimulatedCPU::execute(const int &cmd) {
 }
 
 void SimulatedCPU::fixPageError() {
-    try {
+    try { // free ram memory space was found
         os.assign(m_current_adress, hard_disk, m_current_process, ram, m_current_process->getPageTable());
         mmu.assignCurrentTable(m_current_process->getPageTable());
-    } catch (const exception& eo) {
+    } catch (const exception& eo) { // error is thrown when ram memory space is exhausted
+
+        /** NRU Seitenersetzungsalgo    
+            trigger NRU function every x secs*/
         alarm(1);
-        cout<<"FUNCTION CALLED\n";
-        exit(1);
+
         cerr << "RAM is full - time to make room!" << '\n';
+
+        /**  NRU Seitenersetzungsalgo 
+         ===================================    */
         for (Process& proc : m_processes) {
             for (Page & page : proc.getVirtualMemory()) {
-                bool wasFound = os.substitutePageByFIFO(page.getContent(), proc.getPageTable(), m_current_process->getPageTable(), ram);
+                bool wasFound = os.substitutePageByNRU(proc, ram);
                 if (wasFound) return; // Seitenersetzungsalgo erfolgreich
             }
         }
-        // exit(1);
-    }
 
+        /**  FIFO Seitenersetzungsalgo   
+         ===================================    */
+        //        for (Process& proc : m_processes) {
+        //            for (Page & page : proc.getVirtualMemory()) {
+        //                bool wasFound = os.substitutePageByFIFO(page.getContent(), proc.getPageTable(), m_current_process->getPageTable(), ram);
+        //                if (wasFound) return; // Seitenersetzungsalgo erfolgreich
+        //            }
+        //        }
+    }
 }
 
 void SimulatedCPU::readOrWriteToRAM(const bool& isReading, const size_t& index) {
-
     /* check if page frame is assigned to external process	*/
     if (static_cast<size_t> (ram[index]) != m_current_process->getId()) {
         cout << "INDEX1:" << dec << static_cast<size_t> (ram[index]) << '\n';
@@ -172,8 +193,10 @@ void SimulatedCPU::readOrWriteToRAM(const bool& isReading, const size_t& index) 
         cerr << "ERROR_ attempted to read or write from external process. \n";
         return;
     }
+
     switch (INSTRUCTION(isReading)) {
         case READ:
+            os.updateRefModBit(static_cast<size_t> (READ), m_current_process, m_current_adress);
             // Read content of page frame block ( adress + offset ) 
             for (size_t i = 0; i < Process::OFFSET_LENGTH; i++) {
                 cout << dec << '[' << static_cast<int> (ram[index + i]) << "]\n";
@@ -181,6 +204,7 @@ void SimulatedCPU::readOrWriteToRAM(const bool& isReading, const size_t& index) 
             break;
 
         case WRITE:
+            os.updateRefModBit(static_cast<size_t> (WRITE), m_current_process, m_current_adress);
             // Write content of page frame block ( adress + offset ) 
             for (size_t i = 0; i < Process::OFFSET_LENGTH; i++) {
                 ram[index + i] = m_current_process->getId();

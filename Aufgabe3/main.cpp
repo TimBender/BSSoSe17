@@ -9,14 +9,11 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-
 	srand(static_cast<unsigned int>(time(NULL)));
 
 	const size_t NUM_OF_PROCESS = 255;
 
 	vector<Process> processes;
-
-
 
 	/*	Pseudozahlen Generator	*/
 	random_device rd;
