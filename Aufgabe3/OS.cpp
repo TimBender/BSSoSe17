@@ -14,7 +14,7 @@ void OS::assign(const bitset<6>& adress, vector<Page>& hard_disk, Process* curre
         if (adress.to_ulong() == hard_disk[i].getVirtualAdress().to_ulong() && hard_disk[i].getContent() == current_process->getId()) {
             PAGE_ERROR_COUNTER++; // increment: page error occured    
 
-            /*  search for existing duplicate + delete it*/
+            /*  NRU: search for existing duplicate + delete it*/
             if (m_page_classes.empty()) {
                 p_class = determineClass(current_process, adress);
                 m_page_classes.insert(make_pair(p_class, hard_disk[i])); // add page with updated class info

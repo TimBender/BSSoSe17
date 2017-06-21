@@ -137,8 +137,8 @@ void SimulatedCPU::execute(const int &cmd) {
     /*	read/write [adress]	*/
     if (SimulatedCPU::INSTRUCTION(cmd) == READ || SimulatedCPU::INSTRUCTION(cmd) == WRITE) {
         /*  choose one adress generator for testing purposes    */
-        adress_generator_delta(0x20);
-        // adress_generator_rand_probabilty(true); // current adress preferred
+        // adress_generator_delta(0x20);
+        adress_generator_rand_probabilty(true); // current adress preferred
 
         cout << "LOAD 0x" << hex << static_cast<int> (m_current_adress) << "\n\n";
         try {
@@ -162,7 +162,7 @@ void SimulatedCPU::fixPageError() {
         cerr << "RAM is full - time to make room!" << '\n';
 
         /**  NRU Seitenersetzungsalgo 
-         ===================================    */
+         ===================================   */ 
         for (Process& proc : m_processes) {
             for (Page & page : proc.getVirtualMemory()) {
               
@@ -173,12 +173,13 @@ void SimulatedCPU::fixPageError() {
 
         /**  FIFO Seitenersetzungsalgo   
          ===================================    */
-        //        for (Process& proc : m_processes) {
-        //            for (Page & page : proc.getVirtualMemory()) {
-        //                bool wasFound = os.substitutePageByFIFO(page.getContent(), proc.getPageTable(), m_current_process->getPageTable(), ram);
-        //                if (wasFound) return; // Seitenersetzungsalgo erfolgreich
-        //            }
-        //        }
+//                for (Process& proc : m_processes) {
+//                    for (Page & page : proc.getVirtualMemory()) {
+//                        bool wasFound = os.substitutePageByFIFO(page.getContent(), proc.getPageTable(), m_current_process->getPageTable(), ram);
+//                        if (wasFound) return; // Seitenersetzungsalgo erfolgreich
+//                    }
+//                }
+        
     }
 }
 
