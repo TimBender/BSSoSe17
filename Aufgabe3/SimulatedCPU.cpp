@@ -159,16 +159,13 @@ void SimulatedCPU::fixPageError() {
         mmu.assignCurrentTable(m_current_process->getPageTable());
     } catch (const exception& eo) { // error is thrown when ram memory space is exhausted
 
-        /** NRU Seitenersetzungsalgo    
-            trigger NRU function every x secs*/
-        alarm(1);
-
         cerr << "RAM is full - time to make room!" << '\n';
 
         /**  NRU Seitenersetzungsalgo 
          ===================================    */
         for (Process& proc : m_processes) {
             for (Page & page : proc.getVirtualMemory()) {
+              
                 bool wasFound = os.substitutePageByNRU(proc, ram);
                 if (wasFound) return; // Seitenersetzungsalgo erfolgreich
             }

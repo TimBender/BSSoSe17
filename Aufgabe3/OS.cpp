@@ -8,31 +8,45 @@ size_t OS::TIMEOUT_TRACKER = 0;
 const size_t OS::TIMEOUT_QUANTUM = 4;
 
 void OS::assign(const bitset<6>& adress, vector<Page>& hard_disk, Process* current_process, vector<unsigned char>& ram, vector<array<size_t, 4 >> &table) {
-    int num = 0;
+    size_t p_class;
     bool hasFreeRAM = 1;
     for (size_t i = 0; i < hard_disk.size(); i++) {
         if (adress.to_ulong() == hard_disk[i].getVirtualAdress().to_ulong() && hard_disk[i].getContent() == current_process->getId()) {
-            
-            // bei OS Erstellung 1x alle Pages einlesen mit Klasse!
-            // NRU UNIKATE VERMEIDEN! nach Page suchen dann updaten -> doppelte Schleife 
-            
-            
+            PAGE_ERROR_COUNTER++; // increment: page error occured    
+
+            /*  search for existing duplicate + delete it*/
+            if (m_page_classes.empty()) {
+                p_class = determineClass(current_process, adress);
+                m_page_classes.insert(make_pair(p_class, hard_disk[i])); // add page with updated class info
+            } else
+                resolveDuplicateCombi(current_process, hard_disk[i]);
+
+            /* RAM has no empty memory space left */
             hasFreeRAM = findEmptyMemoryspace(current_process, adress, ram);
             if (!hasFreeRAM) {
                 m_assignable_page = hard_disk[i];
                 throw exception();
-            } else {
-                PAGE_ERROR_COUNTER++; // increment: page error occured
             }
-            /*	search for an empty spot in ram	*/
 
-
-            return;
+            return; // exit loop after page error was treated accordingly;
         }
-        num = i;
     }
 
     cerr << "ERROR_ page not found.\n";
+}
+
+void OS::resolveDuplicateCombi(Process* current_process, Page& page) {
+    size_t p_class;
+
+    for (auto it = m_page_classes.begin(); it != m_page_classes.end(); it++) {
+        if (it->second.getVirtualAdress().to_ulong() == page.getVirtualAdress().to_ulong()) {
+            p_class = determineClass(current_process, it->second.getVirtualAdress());
+            Page tempPage = it->second;
+            m_page_classes.insert(make_pair(p_class, tempPage)); // add page with updated class info
+            m_page_classes.erase(it); // delete old, invalid page - class combination
+            break;
+        }
+    }
 }
 
 bool OS::findEmptyMemoryspace(Process* current_process, const bitset<6>& adress, vector<unsigned char>& ram) {
@@ -62,9 +76,9 @@ bool OS::findEmptyMemoryspace(Process* current_process, const bitset<6>& adress,
 void OS::addToRAM(Process* current_process, const bitset<6>& adress, vector<unsigned char>& ram, const size_t& index) {
     m_fifo_queue.push_back(current_process->find(adress)); // Seitenersetzungsalgo: fifo queuing
 
-    size_t pClass = determineClass(current_process, adress);
+    // size_t pClass = determineClass(current_process, adress);
 
-    m_page_classes.insert(make_pair(pClass, current_process->find(adress)));
+    //  m_page_classes.insert(make_pair(pClass, current_process->find(adress)));
 
     for (size_t j = index; j < index + Process::OFFSET_LENGTH; j++) {
         /*Funktion auslagern*/
@@ -144,6 +158,7 @@ void OS::addToRAM(vector<unsigned char>& ram) {
 bool OS::substitutePageByNRU(Process& process, vector<unsigned char>& ram) {
     Page& rand_lowest_class_page = randLowestClass();
     size_t pageNr;
+
     if (process.getId() == rand_lowest_class_page.getContent()) {
         pageNr = extractPageNum(rand_lowest_class_page.getVirtualAdress());
         /*  reset modified and reference bit to 0*/

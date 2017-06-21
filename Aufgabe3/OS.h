@@ -44,7 +44,7 @@ private:
 
     size_t extractPageNum(const bitset<6>& adress) const; // extracts the page number from the virtual adress
     Page& randLowestClass();
-
+    void resolveDuplicateCombi(Process* current_process, Page& page);   // eliminate duplicate page - class combination and update the affected pair's class 
     /*  Singleton Pattern */
     OS() {
     };

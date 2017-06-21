@@ -10,8 +10,11 @@ void OS::assign(const bitset<6>& adress, vector<Page>& hard_disk, Process* curre
 {
 	int num = 0;
 	bool hasFreeRAM= 1;
+
 	for (size_t i = 0; i < hard_disk.size(); i++){
 		if (adress.to_ulong() == hard_disk[i].getVirtualAdress().to_ulong() &&hard_disk[i].getContent() == current_process->getId()){
+			/*	NRU: add page to container with class */
+
 			hasFreeRAM = findEmptyMemoryspace(current_process, adress, ram);
 			if (!hasFreeRAM)	throw exception("RAM IS FULL - TIME TO MAKE ROOM!\n");
 			else{
