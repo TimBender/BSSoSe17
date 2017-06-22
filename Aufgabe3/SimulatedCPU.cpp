@@ -79,7 +79,6 @@ void SimulatedCPU::adress_generator_rand_probabilty(const bool& preferCurrentAdr
 Befehlssatz= lesen	/	schreiben	/ Prozesswechsel	*/
 void SimulatedCPU::execute(const int &cmd) {
     /*	choose an adress generator	*/
-    
     // NRU
     if (OS::TIMEOUT_TRACKER % OS::TIMEOUT_QUANTUM == 0) { // trigger time out every quantum unit
         std::cout << "TIME OUT - reset all reference bits to 0" << std::endl;
@@ -88,8 +87,6 @@ void SimulatedCPU::execute(const int &cmd) {
             os.resetRefBit(proc);
         }
     }
-    
-    
     OS::TIMEOUT_TRACKER++; // increment timeout tracker to calc next timeout for NRU 
 
     std::cout << "\n______________________________________\n\n";
@@ -140,8 +137,8 @@ void SimulatedCPU::execute(const int &cmd) {
     /*	read/write [adress]	*/
     if (SimulatedCPU::INSTRUCTION(cmd) == READ || SimulatedCPU::INSTRUCTION(cmd) == WRITE) {
         /*  choose one adress generator for testing purposes    */
-        adress_generator_delta(0x20);
-//        adress_generator_rand_probabilty(true); // current adress preferred
+         adress_generator_delta(0x20);
+        // adress_generator_rand_probabilty(true); // current adress preferred
 
         cout << "LOAD 0x" << hex << static_cast<int> (m_current_adress) << "\n\n";
         try {
