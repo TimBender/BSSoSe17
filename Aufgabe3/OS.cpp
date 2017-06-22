@@ -14,6 +14,7 @@ void OS::assign(const bitset<6>& adress, vector<Page>& hard_disk, Process* curre
         if (adress.to_ulong() == hard_disk[i].getVirtualAdress().to_ulong() && hard_disk[i].getContent() == current_process->getId()) {
             PAGE_ERROR_COUNTER++; // increment: page error occured    
 
+            
             /*  NRU: search for existing duplicate + delete it*/
             if (m_page_classes.empty()) {
                 p_class = determineClass(current_process, adress);
@@ -21,6 +22,7 @@ void OS::assign(const bitset<6>& adress, vector<Page>& hard_disk, Process* curre
             } else
                 resolveDuplicateCombi(current_process, hard_disk[i]);
 
+            
             /* RAM has no empty memory space left */
             hasFreeRAM = findEmptyMemoryspace(current_process, adress, ram);
             if (!hasFreeRAM) {
@@ -109,10 +111,16 @@ void OS::updateRefModBit(const size_t& whichBit, Process* current_process, const
 }
 
 Page& OS::randLowestClass() {
-    size_t counter = 0;
+    size_t counter = 0, rangeCounter=0;
     int randIdx = static_cast<int> (rand() % m_page_classes.size()); // generate random index for picking a page of the lowest class   
     auto p_lowest_class = m_page_classes.equal_range(m_page_classes.begin()->first); // get iterator pointing to pages of the lowest existing class
 
+    
+    for (auto it = p_lowest_class.first; it != p_lowest_class.second; it++) {
+        rangeCounter++;
+    }
+    
+    randIdx= rand()% rangeCounter;
     for (auto it = p_lowest_class.first; it != p_lowest_class.second; it++) {
         if (counter == randIdx) return it->second;
         counter++;
